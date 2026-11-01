@@ -370,6 +370,20 @@ body {background:#051b32!important;color:#f7fff9!important}
   .event-facts{margin-top:10px!important}
   .home-content{margin-top:12px!important}
 }
+
+
+/* Pontos clicáveis alinhados à imagem original enviada (331×506) */
+.faithful-frame .faithful-logo{left:3.32326%;top:0.00000%;width:77.94562%;height:9.09091%;right:auto}
+.faithful-frame .faithful-menu{left:83.38369%;top:0.79051%;width:15.40785%;height:8.10277%;right:auto}
+.faithful-frame .faithful-signup{left:23.26284%;top:42.49012%;width:56.19335%;height:7.70751%;right:auto}
+.faithful-frame .faithful-signups-card{left:3.92749%;top:62.84585%;width:45.31722%;height:7.90514%;right:auto}
+.faithful-frame .faithful-categories{left:51.05740%;top:62.84585%;width:45.92145%;height:7.90514%;right:auto}
+.faithful-frame .faithful-awards{left:3.92749%;top:71.34387%;width:45.31722%;height:8.30040%;right:auto}
+.faithful-frame .faithful-rules{left:51.05740%;top:71.34387%;width:45.92145%;height:8.30040%;right:auto}
+.faithful-frame{width:min(100%,450px)!important;max-width:450px!important;}
+.faithful-art{image-rendering:auto}
+.faithful-frame .faithful-links{line-height:1.45}
+@media(min-width:781px){.faithful-frame{width:min(100%,540px)!important;max-width:540px!important}}
 </style>
 <style id="calebe-slide-escolhido">
 .calebe-hero-novo{position:relative;min-height:0!important;display:block;overflow:hidden;background:#00112c;border:0!important;line-height:0;isolation:isolate;text-align:center}
@@ -582,6 +596,8 @@ main:has(.faithful-poster:not([hidden])){padding:0!important;margin:0 auto!impor
     const homeBanner = document.querySelector('.calebe-hero-novo');
     if (homeBanner) homeBanner.hidden = name !== 'inicio';
     const mobileLanding = document.querySelector('.calebe-mobile-landing');
+    const faithfulLinks = document.getElementById('faithful-links');
+    if (faithfulLinks) faithfulLinks.hidden = true;
     if (mobileLanding) mobileLanding.hidden = name !== 'inicio';
     document.querySelectorAll('[data-view]').forEach(section => {
       section.hidden = section.dataset.view !== name;
