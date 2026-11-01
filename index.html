@@ -495,6 +495,10 @@ body{background:radial-gradient(circle at top,#5d2b17 0,#2a1209 42%,#130703 100%
 .wa-loading-card small{display:block;font-size:11px;font-weight:900;color:#ffd475;letter-spacing:.1em;margin-top:13px}
 @keyframes wa-fill-4s{from{width:0}to{width:100%}}
 
+
+/* Situação do contador do Firebase */
+.firebase-status{margin:10px 2px 0;padding:5px 9px;color:#efcd87;font-size:12px;font-weight:700}
+.firebase-status.sync-error{color:#ffb7a0}
 </style>
 <style id="calebe-slide-escolhido">
 .calebe-hero-novo{position:relative;min-height:0!important;display:block;overflow:hidden;background:#00112c;border:0!important;line-height:0;isolation:isolate;text-align:center}
@@ -719,6 +723,7 @@ footer .footer-inner a:hover{color:#fff0b3!important}
 <div class="section-heading"><div><span class="eyebrow">PARTICIPE DO TORNEIO</span><h2><svg class="ic"><use href="#i-clipboard"></use></svg> INSCRIÇÕES</h2></div><p>Garanta sua participação no Torneio de Pênaltis Missão Calebe!</p></div>
 <div class="signup-notice"><strong>Inscrição: R$ 50,00 por dupla · Torneio: domingo, 20/12/2026</strong><span>Local: Colégio Machadinho — Caruaru/PE · Horário: 8h00</span><div class="venue-address-line">Rua Olegário Bezerra, s/n · São Francisco · CEP 55006-470</div><small>São 64 vagas no Juvenil e 64 vagas no Adulto. As inscrições encerram em 10/12/2026 às 23:59. Mesma premiação para Juvenil e Adulto: 1º lugar: R$ 300,00 + troféus · 2º lugar: R$ 150,00.</small><a class="venue-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Escola%20Municipal%20Professor%20Jos%C3%A9%20Flor%C3%AAncio%20Neto%20%28Professor%20Machadinho%29%2C%20Rua%20Oleg%C3%A1rio%20Bezerra%2C%20s/n%2C%20S%C3%A3o%20Francisco%2C%20Caruaru%2C%20PE%2C%2055006-470&amp;travelmode=driving" rel="noopener noreferrer" target="_blank">📍 Abrir no GPS ↗</a></div>
 <div class="registration-dashboard"><div class="countdown-card"><div class="countdown-label">CONTAGEM REGRESSIVA DAS INSCRIÇÕES</div><div class="countdown-grid"><div class="count-item"><strong id="count-months">0</strong><span>Meses</span></div><div class="count-item"><strong id="count-days">0</strong><span>Dias</span></div><div class="count-item"><strong id="count-hours">0</strong><span>Horas</span></div><div class="count-item"><strong id="count-minutes">0</strong><span>Minutos</span></div><div class="count-item"><strong id="count-seconds">0</strong><span>Segundos</span></div></div><small class="countdown-help">As inscrições ficam abertas até <b>10/12/2026 às 23:59</b>.</small></div><div class="slots-board"><div class="slot-card"><div class="slot-head"><strong>JUVENIL</strong><span id="juvenil-count">0/64</span></div><div class="slot-sub">14 a 15 anos</div><div class="slot-bar"><i id="juvenil-fill"></i></div><small id="juvenil-left">64 vagas disponíveis</small></div><div class="slot-card"><div class="slot-head"><strong>ADULTO</strong><span id="adulto-count">0/64</span></div><div class="slot-sub">16 anos em diante</div><div class="slot-bar"><i id="adulto-fill"></i></div><small id="adulto-left">64 vagas disponíveis</small></div></div></div>
+<div aria-live="polite" id="firebase-status" class="firebase-status">Conectando ao contador online…</div>
 <div class="signup-panel">
 <aside class="signup-aside"><div class="signup-aside-title"><svg class="ic"><use href="#i-users"></use></svg><h3>Categorias do Torneio</h3></div><div class="category-item"><b>JUVENIL</b><span>De 14 a 15 anos · 64 vagas</span></div><div class="category-item"><b>ADULTO</b><span>De 16 anos em diante · 64 vagas</span></div><div class="category-note"><svg class="ic"><use href="#i-info"></use></svg><span>Informe a idade do jogador para definir sua categoria automaticamente. Após 10/12/2026, as inscrições serão bloqueadas.</span></div></aside>
 <form id="signup" novalidate="">
@@ -735,7 +740,7 @@ footer .footer-inner a:hover{color:#fff0b3!important}
 <div aria-live="polite" class="age-feedback" id="age-feedback" role="status">Juvenil: de 14 a 15 anos <span>•</span> Adulto: de 16 anos em diante.</div>
 <fieldset class="contato-escolha"><legend>Para quem deseja enviar sua inscrição? <em>*</em></legend><label class="contato-opcao"><input type="radio" name="destinatario" value="nelsiane" checked required/><span><strong>Nelsiane</strong><small>(81) 97332-4838</small></span></label><label class="contato-opcao"><input type="radio" name="destinatario" value="branca" required/><span><strong>Branca</strong><small>(81) 9236-3729</small></span></label></fieldset>
 <button class="btn btn-whatsapp" type="submit"><svg class="ic"><use href="#i-phone"></use></svg> ENVIAR INSCRIÇÃO PELO WHATSAPP <svg class="ic"><use href="#i-arrow"></use></svg></button>
-<p class="privacy">Escolha Nelsiane ou Branca. Ao clicar, o WhatsApp abrirá com sua inscrição preenchida para o contato selecionado. O envio só é concluído quando você tocar em <b>Enviar</b> no WhatsApp. A contagem aumenta ao iniciar uma inscrição pelo formulário neste navegador, mesmo que a mensagem não seja enviada. Ela não representa inscrições confirmadas e não é compartilhada entre aparelhos. A inscrição só é enviada quando você confirmar no WhatsApp. O bloqueio por prazo funciona pelo relógio do dispositivo; para bloqueio central e vagas reais é necessário um serviço conectado.</p>
+<p class="privacy">Escolha Nelsiane ou Branca. Ao clicar, o WhatsApp abrirá com sua inscrição preenchida para o contato selecionado. O envio só é concluído quando você tocar em <b>Enviar</b> no WhatsApp. A vaga é contabilizada no Firebase quando o formulário é confirmado, antes do envio da mensagem no WhatsApp. A mensagem só é enviada quando você tocar em Enviar no WhatsApp. A contagem de vagas é compartilhada entre os aparelhos.</p>
 <p class="form-feedback" hidden="" id="form-feedback" role="alert"></p>
 </form>
 </div>
@@ -749,22 +754,14 @@ footer .footer-inner a:hover{color:#fff0b3!important}
 <div class="award-grid"><div class="award-card first"><span>🏆 1º LUGAR</span><strong>PIX DE R$ 300,00</strong><small>+ TROFÉUS</small></div><div class="award-card second"><span>🥈 2º LUGAR</span><strong>PIX DE R$ 150,00</strong></div></div>
 <p class="award-location">Local: <b>Colégio Machadinho — Rua Olegário Bezerra, s/n, São Francisco, Caruaru</b> · Domingo, <b>20/12/2026</b> às <b>08h00</b> · Inscrição por dupla: <b>R$ 50,00</b> <a class="venue-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Escola%20Municipal%20Professor%20Jos%C3%A9%20Flor%C3%AAncio%20Neto%20%28Professor%20Machadinho%29%2C%20Rua%20Oleg%C3%A1rio%20Bezerra%2C%20s/n%2C%20S%C3%A3o%20Francisco%2C%20Caruaru%2C%20PE%2C%2055006-470&amp;travelmode=driving" rel="noopener noreferrer" target="_blank">📍 Abrir no GPS</a></p><img alt="Troféu dourado do campeonato" class="prize-img" height="263" src="imagens/trofeu-premiacao.webp" width="465"/></div></section>
 </div>
-<section class="view" data-view="administracao" hidden id="administracao"><div class="details-panel"><span class="eyebrow">ÁREA DA ORGANIZAÇÃO</span><h2>ADM — Ajustar vagas de teste</h2><p>Escolha a categoria e quantas inscrições de teste deseja remover da contagem deste navegador.</p><details class="adjustment-panel" id="ajuste-vagas" open>
-<summary>Organização — ajustar inscrições de teste</summary>
-<div class="adjustment-body">
-<p>Use esta opção para diminuir a contagem de inscrições de teste <strong>neste navegador</strong>. Selecione a categoria e quantas inscrições deseja remover.</p>
-<form id="adjust-count-form" autocomplete="off">
-<div class="adjustment-fields">
-<label>Categoria<select id="adjust-category" required><option value="Juvenil">Juvenil — 14 a 15 anos</option><option value="Adulto">Adulto — 16 anos ou mais</option></select></label>
-<label>Quantidade para apagar<input type="number" id="adjust-amount" min="1" max="64" step="1" value="1" required /></label>
-<label>Senha da organização<input type="password" id="adjust-password" required autocomplete="off" placeholder="Digite a senha" /></label>
-</div>
-<button type="submit" class="btn btn-neon">REMOVER QUANTIDADE DA CONTAGEM</button>
-<p id="adjust-feedback" class="adjustment-feedback" role="status" aria-live="polite"></p>
-</form>
-<small>Aviso: esta função não cancela mensagens do WhatsApp nem altera inscrições em outros aparelhos. O acesso por senha dentro de um site HTML não é autenticação segura.</small>
-</div>
-</details></div></section>
+<section class="view" data-view="administracao" hidden id="administracao">
+  <div class="details-panel"><span class="eyebrow">ÁREA DA ORGANIZAÇÃO</span><h2>ADM — Controle de vagas</h2>
+    <p>As inscrições agora são contabilizadas no Firebase e a contagem é igual em todos os aparelhos.</p>
+    <p>Para corrigir uma vaga de teste ou liberar uma vaga de desistência, entre no <strong>Console do Firebase</strong>, abra <strong>Firestore → Dados → contadores</strong>, selecione <strong>juvenil</strong> ou <strong>adulto</strong> e ajuste somente o número do campo <code>inscritos</code>.</p>
+    <p>Somente alguém com acesso autorizado ao seu projeto Google pode fazer esse ajuste. A antiga senha escrita no HTML não era segura e não deve ser usada para alterar o banco de dados público.</p>
+    <a class="btn btn-neon" href="https://console.firebase.google.com/project/calebe-penaltys/firestore/databases/-default-/data" target="_blank" rel="noopener noreferrer">ABRIR CONTADORES NO FIREBASE ↗</a>
+  </div>
+</section>
 </main>
 <footer><div class="footer-inner wrap"><div class="footer-logo"><img alt="Missão Calebe" height="60" src="imagens/logo-calebe.png" width="80"/><div><b>MISSÃO CALEBE</b><span>TORNEIO DE PÊNALTIS</span></div></div><p>Habilidade, concentração e emoção na marca da cal!</p><a href="https://wa.me/5581973324838" rel="noopener noreferrer" target="_blank">WhatsApp — Nelsiane <svg class="ic"><use href="#i-arrow"></use></svg></a><a href="https://wa.me/558192363729" rel="noopener noreferrer" target="_blank">WhatsApp — Branca (81) 9236-3729</a></div></footer>
 <script>
@@ -797,57 +794,8 @@ footer .footer-inner a:hover{color:#fff0b3!important}
   const adultLeft = document.getElementById('adulto-left');
   const INSCRICAO_FIM = new Date('2026-12-10T23:59:59-03:00');
   const LIMITES = { Juvenil: 64, Adulto: 64 };
-  const COUNTS_KEY = 'calebe_inscricoes_contagem_v1';
-  const ENTRIES_KEY = 'calebe_inscricoes_itens_v1';
-
-
-
-
-
-
-  // ======================================================================
-  // ======================================================================
-  //
-  //           AQUI VOCE ZERA AS INSCRICOES DE TESTE
-  //
-  //  COMO USAR:
-  //
-  //  1) DEIXE 0 PARA NAO APAGAR NADA.
-  //  2) DEPOIS DE FAZER INSCRICOES PARA TESTAR, MUDE 0 PARA 1.
-  //  3) SALVE O ARQUIVO (CTRL + S) E ATUALIZE O SITE (CTRL + F5).
-  //     A CONTAGEM VOLTA PARA: JUVENIL 0/64 E ADULTO 0/64.
-  //  4) PARA ZERAR NOVAMENTE NO FUTURO, MUDE 1 PARA 2, DEPOIS 3,
-  //     4, 5... CADA NUMERO NOVO ZERA UMA UNICA VEZ NO NAVEGADOR.
-  //
-  //  IMPORTANTE: APAGA APENAS TESTES SALVOS NESTE NAVEGADOR.
-  //  NAO APAGA MENSAGENS JA ENVIADAS PELO WHATSAPP.
-  //  NAO ALTERA INSCRICOES QUE ESTEJAM EM OUTROS APARELHOS.
-  //
-  //                     ALTERE SO ESTE NUMERO:
-  const VERSAO_ZERAR_TESTES = 1;
-  //
-  // ======================================================================
-  // ======================================================================
-
-  // Executa a limpeza somente uma vez por numero escolhido acima.
-  // A chave de controle e salva no proprio navegador.
-  if (Number.isInteger(VERSAO_ZERAR_TESTES) && VERSAO_ZERAR_TESTES > 0) {
-    try {
-      const chaveExecucao = 'calebe_reset_testes_versao';
-      const ultimaVersao = Number(localStorage.getItem(chaveExecucao) || '0');
-      if (VERSAO_ZERAR_TESTES > ultimaVersao) {
-        localStorage.removeItem(COUNTS_KEY);
-        localStorage.removeItem(ENTRIES_KEY);
-        localStorage.setItem(chaveExecucao, String(VERSAO_ZERAR_TESTES));
-      }
-    } catch (_) { /* O navegador pode bloquear o armazenamento local. */ }
-  }
-
-
-
-
-
-
+  // A contagem oficial vem exclusivamente do Firestore (compartilhada entre dispositivos).
+  const ENTRIES_KEY = 'calebe_firebase_envios_v1';
 
   function viewFromHash() {
     const name = decodeURIComponent(location.hash.slice(1));
@@ -905,40 +853,43 @@ footer .footer-inner a:hover{color:#fff0b3!important}
       return fallback;
     }
   }
-  let counts = safeLoad(COUNTS_KEY, { Juvenil: 0, Adulto: 0 });
-  let entries = safeLoad(ENTRIES_KEY, {});
-  // Corrige apenas contagens antigas sem cadastro correspondente.
-  // Não apaga cadastros detalhados existentes, quando houver.
-  try {
-    const migrationKey = 'calebe_limpeza_contadores_sem_cadastro_v2';
-    if (!localStorage.getItem(migrationKey)) {
-      for (const category of ['Juvenil', 'Adulto']) {
-        const cadastrados = Object.values(entries).filter(registro =>
-          registro && (registro.category === category || registro.categoria === category));
-        if (cadastrados.length === 0) counts[category] = 0;
-        else counts[category] = Math.min(LIMITES[category], cadastrados.length);
-      }
-      localStorage.setItem(COUNTS_KEY, JSON.stringify(counts));
-      localStorage.setItem(migrationKey, '1');
-    }
-  } catch (_) { /* Armazenamento indisponível. */ }
-
-  function persistCounters() {
-    localStorage.setItem(COUNTS_KEY, JSON.stringify(counts));
-    localStorage.setItem(ENTRIES_KEY, JSON.stringify(entries));
-  }
+  let counts = { Juvenil: 0, Adulto: 0 };
+  let entries = safeLoad(ENTRIES_KEY, {}); // Apenas para evitar novo clique duplicado neste navegador.
+  let onlineReady = false;
+  let onlineError = '';
+  let sending = false;
+  const syncLabel = document.getElementById('firebase-status');
   function formatRemainingText(category) {
-    const restante = Math.max(0, LIMITES[category] - counts[category]);
-    return restante === 0 ? 'Vagas esgotadas' : `${restante} vagas disponíveis`;
+    if (!onlineReady) return 'Conectando ao contador online…';
+    const remaining = Math.max(0, LIMITES[category] - counts[category]);
+    return remaining === 0 ? 'Vagas esgotadas' : `${remaining} vagas disponíveis`;
   }
   function updateSlotBoard() {
-    juvenileCount.textContent = `${counts.Juvenil}/${LIMITES.Juvenil}`;
-    adultCount.textContent = `${counts.Adulto}/${LIMITES.Adulto}`;
-    juvenileFill.style.width = `${Math.min(100, (counts.Juvenil / LIMITES.Juvenil) * 100)}%`;
-    adultFill.style.width = `${Math.min(100, (counts.Adulto / LIMITES.Adulto) * 100)}%`;
+    juvenileCount.textContent = onlineReady ? `${counts.Juvenil}/64` : '—/64';
+    adultCount.textContent = onlineReady ? `${counts.Adulto}/64` : '—/64';
+    juvenileFill.style.width = onlineReady ? `${Math.min(100, 100 * counts.Juvenil / 64)}%` : '0%';
+    adultFill.style.width = onlineReady ? `${Math.min(100, 100 * counts.Adulto / 64)}%` : '0%';
     juvenileLeft.textContent = formatRemainingText('Juvenil');
     adultLeft.textContent = formatRemainingText('Adulto');
   }
+  window.addEventListener('calebe-firebase-state', (event) => {
+    const state = event.detail || {};
+    onlineReady = Boolean(state.ready);
+    onlineError = state.error || '';
+    if (state.counts) {
+      counts.Juvenil = Math.max(0, Math.min(64, Number(state.counts.Juvenil) || 0));
+      counts.Adulto = Math.max(0, Math.min(64, Number(state.counts.Adulto) || 0));
+    }
+    if (syncLabel) {
+      syncLabel.textContent = onlineReady
+        ? 'Vagas sincronizadas em tempo real entre celular e computador.'
+        : (onlineError || 'Conectando ao contador de vagas…');
+      syncLabel.classList.toggle('sync-error', Boolean(onlineError));
+    }
+    updateSlotBoard();
+    updateRegistrationState();
+    updateCategory();
+  });
   function addMonths(date, count) {
     const next = new Date(date.getTime());
     next.setMonth(next.getMonth() + count);
@@ -988,70 +939,11 @@ footer .footer-inner a:hover{color:#fff0b3!important}
     return counts[category] >= LIMITES[category];
   }
   function updateRegistrationState() {
-    const allFull = isCategoryFull('Juvenil') && isCategoryFull('Adulto');
-    let message = 'Limite por categoria: 64 vagas. Contagem local (não sincronizada).';
-    if (isDeadlineClosed()) {
-      message = 'Inscrições encerradas. O prazo terminou em 10/12/2026 às 23:59.';
-    } else if (allFull) {
-      message = 'Limite atingido neste navegador: 64 vagas em cada categoria. Inscrições bloqueadas.';
-    } else if (categoryInput.value && isCategoryFull(categoryInput.value)) {
-      message = `As 64 vagas da categoria ${categoryInput.value} já foram preenchidas neste navegador. Inscrições bloqueadas.`;
-    } else {
-      message = 'Inscrições até 10/12/2026 às 23:59. O bloqueio de 64 vagas vale apenas para os dados deste navegador.';
-    }
-    if (deadlineWarning) deadlineWarning.textContent = message;
-    submitButton.disabled = isDeadlineClosed() || allFull || (categoryInput.value && isCategoryFull(categoryInput.value));
+    if (deadlineWarning) deadlineWarning.hidden = true;
+    submitButton.disabled = sending || !onlineReady || isDeadlineClosed()
+      || (isCategoryFull('Juvenil') && isCategoryFull('Adulto'))
+      || (Boolean(categoryInput.value) && isCategoryFull(categoryInput.value));
   }
-  window.addEventListener('storage', (event) => {
-    if (event.key === COUNTS_KEY) {
-      counts = safeLoad(COUNTS_KEY, { Juvenil: 0, Adulto: 0 });
-      updateSlotBoard();
-      updateRegistrationState();
-    }
-  });
-
-  // Validação local simples: não protege dados contra quem inspecionar este HTML.
-  function localPasswordHash(value) {
-    let h = 0x811c9dc5;
-    for (const char of value) {
-      h ^= char.codePointAt(0);
-      h = Math.imul(h, 0x01000193);
-    }
-    return h >>> 0;
-  }
-  const adjustForm = document.getElementById('adjust-count-form');
-  adjustForm.addEventListener('submit', (event) => {
-    event.preventDefault();
-    const note = document.getElementById('adjust-feedback');
-    note.className = 'adjustment-feedback';
-    const password = document.getElementById('adjust-password').value.trim();
-    if (localPasswordHash(password) !== 4071490040) {
-      note.classList.add('error');
-      note.textContent = 'Senha incorreta.';
-      return;
-    }
-    const category = document.getElementById('adjust-category').value;
-    const qty = Number(document.getElementById('adjust-amount').value);
-    if (!Object.hasOwn(LIMITES, category) || !Number.isInteger(qty) || qty < 1 || qty > 64) {
-      note.classList.add('error');
-      note.textContent = 'Informe uma categoria e quantidade válida (1 a 64).';
-      return;
-    }
-    counts[category] = Math.max(0, Math.min(LIMITES[category], Number(counts[category]) || 0) - qty);
-    try {
-      persistCounters();
-    } catch (_) {
-      note.classList.add('error');
-      note.textContent = 'Não foi possível salvar a alteração neste navegador.';
-      return;
-    }
-    updateSlotBoard();
-    updateRegistrationState();
-    updateCategory();
-    note.classList.add('success');
-    note.textContent = `Ajuste realizado: ${qty} inscrição(ões) removida(s) da contagem local ${category}. Agora: ${counts[category]}/64.`;
-    document.getElementById('adjust-password').value = '';
-  });
 
   updateSlotBoard();
   updateCountdown();
@@ -1106,8 +998,9 @@ footer .footer-inner a:hover{color:#fff0b3!important}
   }
   const trim = name => String(form.elements.namedItem(name).value).trim().replace(/\s+/g,' ');
 
-  form.addEventListener('submit', event => {
+  form.addEventListener('submit', async event => {
     event.preventDefault();
+    if (sending) return;
     feedback.hidden = true;
     feedback.textContent = "";
     feedback.classList.remove("success");
@@ -1125,10 +1018,11 @@ footer .footer-inner a:hover{color:#fff0b3!important}
     const age = Number(ageInput.value);
     if (!Number.isInteger(age) || age < 14 || age > 120) { showError('A idade precisa ser um número inteiro de 14 anos ou mais.',ageInput); return; }
     if (isDeadlineClosed()) { showError('As inscrições foram encerradas em 10/12/2026 às 23:59.', submitButton); return; }
+    if (!onlineReady || !window.CalebeFirebase) { showError('O contador online está indisponível. Verifique a conexão e atualize a página. Nenhuma vaga foi contabilizada.', submitButton); return; }
     updateCategory();
     const category = categoryInput.value;
     if (!category) { showError('Não foi possível determinar a categoria. Confira a idade.',ageInput); return; }
-    if (isCategoryFull(category)) { showError(`As 64 vagas da categoria ${category} já foram preenchidas neste navegador. Inscrições bloqueadas.`, ageInput); return; }
+    if (isCategoryFull(category)) { showError(`As 64 vagas da categoria ${category} já foram preenchidas. Inscrições bloqueadas.`, ageInput); return; }
 
     const lines = [
       'DE PÊNALTIS MISSÃO CALEBE',
@@ -1146,28 +1040,35 @@ footer .footer-inner a:hover{color:#fff0b3!important}
     const contato = CONTATOS_INSCRICAO[destinatario];
     if (!contato) { showError('Escolha Nelsiane ou Branca para enviar a inscrição.', submitButton); return; }
     const url = `https://wa.me/${contato.numero}?text=${encodeURIComponent(lines.join('\n'))}`;
-    feedback.hidden = false;
-    feedback.classList.add('success');
-    // Contagem local da solicitação iniciada neste navegador. Não comprova envio no WhatsApp.
     const registrationKey = [category, digits, trim('time').toLowerCase(), trim('jogador').toLowerCase(), trim('goleiro').toLowerCase()].join('|');
     const duplicate = Object.prototype.hasOwnProperty.call(entries, registrationKey);
+    sending = true;
+    updateRegistrationState();
+    // Uma vaga só é somada quando o Firestore confirmar a operação.
     if (!duplicate) {
-      const previous = counts[category];
-      counts[category] = Math.min(LIMITES[category], previous + 1);
-      entries[registrationKey] = {category, responsavel:trim('responsavel'), telefone:formatPhone(digits), time:trim('time'), jogador:trim('jogador'), goleiro:trim('goleiro'), idade:age, igreja:trim('igreja'), createdAt:new Date().toISOString()};
       try {
-        persistCounters();
-        updateSlotBoard();
-      } catch (_) {
-        counts[category] = previous;
-        delete entries[registrationKey];
-        feedback.classList.remove('success');
-        feedback.textContent = 'O WhatsApp será aberto, mas não foi possível salvar a contagem neste navegador.';
+        await window.CalebeFirebase.reserve(category);
+        // O registro local evita contar o mesmo envio novamente neste navegador.
+        entries[registrationKey] = { category, criadoEm: new Date().toISOString() };
+        try { localStorage.setItem(ENTRIES_KEY, JSON.stringify(entries)); } catch (_) {}
+      } catch (error) {
+        sending = false;
+        updateRegistrationState();
+        if (error?.code === 'vagas-esgotadas') {
+          showError(`As 64 vagas da categoria ${category} já foram preenchidas.`, ageInput);
+        } else if (error?.code === 'permission-denied') {
+          showError('O Firestore não autorizou o registro. Publique as regras que acompanham o ZIP e confira o prazo das inscrições.', submitButton);
+        } else {
+          showError('Falha ao registrar no contador online. Verifique a internet e as regras do Firebase. Nenhuma inscrição foi contada.', submitButton);
+        }
+        return; // Não abre o WhatsApp se a gravação não tiver sido confirmada.
       }
     }
-    if (!feedback.textContent) feedback.textContent = duplicate
+    feedback.hidden = false;
+    feedback.classList.add('success');
+    feedback.textContent = duplicate
       ? `Este cadastro já foi contado neste navegador. Abrindo o WhatsApp de ${contato.nome}.`
-      : `Solicitação registrada neste navegador. Abrindo o WhatsApp de ${contato.nome}. Confirme o envio no WhatsApp.`;
+      : `Vaga contabilizada no Firebase. Abrindo o WhatsApp de ${contato.nome}. Confirme o envio da mensagem.`;
     const oldLink = document.getElementById('manual-whatsapp-link');
     if (oldLink) oldLink.remove();
     const manualLink = document.createElement('a');
@@ -1179,13 +1080,9 @@ footer .footer-inner a:hover{color:#fff0b3!important}
     manualLink.style.cssText = 'display:inline-block;margin-top:9px;color:#ffd26d;text-decoration:underline;font-weight:800';
     feedback.appendChild(document.createElement('br'));
     feedback.appendChild(manualLink);
-
-    // Contagem feita no envio do formulário; a mensagem ainda precisa ser enviada no WhatsApp.
     const loading = document.getElementById('whatsapp-loading');
-    submitButton.disabled = true;
     loading.hidden = false;
     loading.classList.remove('is-running');
-    // Reinicia a animação quando houver uma nova tentativa.
     void loading.offsetWidth;
     loading.classList.add('is-running');
     setTimeout(() => { window.location.assign(url); }, 4000);
@@ -1205,5 +1102,6 @@ footer .footer-inner a:hover{color:#fff0b3!important}
     <small>ABRINDO WHATSAPP...</small>
   </div>
 </div>
+<script type="module" src="firebase-sync.js"></script>
 </body>
 </html>
