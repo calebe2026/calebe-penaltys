@@ -461,6 +461,40 @@ body{background:radial-gradient(circle at top,#5d2b17 0,#2a1209 42%,#130703 100%
 .calebe-mobile-landing .slide-countdown-below .slide-countdown-caption{font-size:clamp(9px,2.8vw,12px);line-height:1.3;color:#ffcf77}
 .calebe-mobile-landing .slide-countdown-below #slide-countdown-value{font-size:clamp(11px,3.3vw,15px);line-height:1.3;color:white}
 @media(max-width:450px){.calebe-mobile-landing .slide-countdown-below{padding:9px 12px 15px}.calebe-mobile-landing .slide-countdown-below .slide-countdown{border-radius:18px;padding:9px 12px!important}}
+
+/* Cores da área de inscrições em marrom e dourado */
+#inscricoes .section-heading{padding:10px 4px 18px!important;border-bottom:1px solid rgba(231,173,71,.18)!important;margin-bottom:18px!important}
+#inscricoes .section-heading h2{color:#fff2dc!important}
+#inscricoes .section-heading .ic,#inscricoes .section-heading .eyebrow{color:#f2bf58!important}
+#inscricoes .section-heading p{color:#f2e5d6!important}
+#inscricoes .signup-notice{background:linear-gradient(145deg,#4a1f0f,#2c120a 78%)!important;border:1px solid rgba(240,182,74,.48)!important;box-shadow:0 14px 34px rgba(0,0,0,.24), inset 0 1px rgba(255,225,173,.08)!important;color:#fff3e1!important}
+#inscricoes .signup-notice strong{color:#ffd24f!important}
+#inscricoes .signup-notice span{color:#fff4e4!important}
+#inscricoes .signup-notice .venue-address-line{color:#f4dcc4!important}
+#inscricoes .signup-notice small{color:#f1dfcb!important}
+#inscricoes .signup-notice .venue-link{background:linear-gradient(180deg,#ffd56f,#df981e)!important;color:#2b1307!important;border:1px solid #ffd98b!important;box-shadow:0 10px 24px rgba(0,0,0,.22),0 0 0 rgba(0,0,0,0)!important}
+#inscricoes .signup-notice .venue-link:hover{transform:translateY(-2px);box-shadow:0 14px 28px rgba(0,0,0,.28)!important}
+
+
+/* Horário corrigido na imagem original do cartaz */
+.faithful-frame .poster-time-fix{position:absolute;z-index:3;left:71.5%;top:53.65%;width:20.5%;height:4%;background:linear-gradient(#321405,#240d05);color:#fff5df;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border-radius:7px;pointer-events:none;box-shadow:0 0 10px #1d0805;font-family:Inter,system-ui,sans-serif;line-height:1.15}
+.poster-time-fix span{font-size:clamp(7px,1.1vw,12px);font-weight:900;color:#f8c15a;letter-spacing:.06em}
+.poster-time-fix strong{font-size:clamp(14px,2vw,26px);font-weight:1000;color:white}
+@media(max-width:600px){.poster-time-fix span{font-size:clamp(5px,1.3vw,8px)}.poster-time-fix strong{font-size:clamp(10px,3vw,18px)}}
+/* Modelo 1: barra dourada de 4 segundos */
+.wa-loading[hidden]{display:none!important}
+.wa-loading{position:fixed;inset:0;z-index:99999;display:flex;justify-content:center;align-items:center;padding:24px;background:rgba(12,4,2,.85);backdrop-filter:blur(8px)}
+.wa-loading-card{width:min(100%,440px);padding:35px 26px 28px;text-align:center;border:2px solid #e7a83f;border-radius:24px;background:radial-gradient(circle at 50% 0%,#703510,#351507 65%,#1b0904);box-shadow:0 0 45px #a85e2a66;color:#fff2de}
+.wa-loading-mark{font-size:12px;letter-spacing:.18em;font-weight:900;color:#ffd476}
+.wa-loading-symbol{font-size:50px;margin:14px 0 8px;filter:drop-shadow(0 2px 11px #ffa51c99)}
+.wa-loading-card h2{font-weight:950;font-size:clamp(23px,6vw,32px);margin:5px 0 8px;color:#fff8e8}
+.wa-loading-card p{font-size:14px;line-height:1.5;color:#f5dbc0;margin:0 0 22px}
+.wa-loading-track{overflow:hidden;height:14px;border:1px solid #f9c15e;border-radius:18px;background:#160803;box-shadow:inset 0 2px 7px #100300}
+.wa-loading-progress{height:100%;width:0;background:linear-gradient(90deg,#c87910,#ffdb65,#fff4b4);box-shadow:0 0 15px #ffba32}
+.wa-loading.is-running .wa-loading-progress{animation:wa-fill-4s 4s linear forwards}
+.wa-loading-card small{display:block;font-size:11px;font-weight:900;color:#ffd475;letter-spacing:.1em;margin-top:13px}
+@keyframes wa-fill-4s{from{width:0}to{width:100%}}
+
 </style>
 <style id="calebe-slide-escolhido">
 .calebe-hero-novo{position:relative;min-height:0!important;display:block;overflow:hidden;background:#00112c;border:0!important;line-height:0;isolation:isolate;text-align:center}
@@ -641,6 +675,7 @@ footer .footer-inner a:hover{color:#fff0b3!important}
 <button aria-label="Abrir menu de navegação" class="faithful-hotspot faithful-menu" onclick="document.getElementById('faithful-links').hidden = !document.getElementById('faithful-links').hidden" type="button"></button>
 <nav class="faithful-links" hidden="" id="faithful-links"><a href="#inicio">Início</a><a href="#inscricoes">Inscrições</a><a href="#regulamento">Regulamento</a><a href="#categorias">Categorias</a><a href="#premiacao">Premiação</a><a href="#administracao">ADM</a><a href="#tabela">Tabela</a><a href="https://wa.me/5581973324838" rel="noopener" target="_blank"> Nelsiane</a><a href="https://wa.me/558192363729" rel="noopener noreferrer" target="_blank">Branca — WhatsApp</a></nav>
 <a aria-label="Fazer minha inscrição" class="faithful-hotspot faithful-signup" href="#inscricoes"></a>
+<div class="poster-time-fix" aria-label="Horário de início: 8 horas"><span>HORÁRIO</span><strong>08h00</strong></div>
 <a aria-label="Ver categorias" class="faithful-hotspot faithful-categories" href="#categorias"></a>
 <a aria-label="Ver regulamento" class="faithful-hotspot faithful-rules" href="#regulamento"></a>
 <a aria-label="Ver premiação" class="faithful-hotspot faithful-awards" href="#premiacao"></a>
@@ -658,7 +693,7 @@ footer .footer-inner a:hover{color:#fff0b3!important}
 <div aria-label="Informações principais do torneio" class="event-facts wrap">
 <div class="event-fact"><span>DATA DO TORNEIO</span><strong>Domingo, 20/12/2026</strong></div>
 <div class="event-fact"><span>LOCAL</span><strong>Colégio Machadinho · Caruaru/PE</strong></div>
-<div class="event-fact"><span>HORÁRIO</span><strong>08h30</strong></div>
+<div class="event-fact"><span>HORÁRIO</span><strong>08h00</strong></div>
 <div class="event-fact"><span>VAGAS</span><strong>64 Juvenil · 64 Adulto</strong></div>
 <div class="event-fact"><span>FIM DAS INSCRIÇÕES</span><strong>10/12/2026 às 23:59</strong></div>
 </div>
@@ -682,8 +717,8 @@ footer .footer-inner a:hover{color:#fff0b3!important}
 </section>
 <section class="view" data-view="inscricoes" hidden="" id="inscricoes">
 <div class="section-heading"><div><span class="eyebrow">PARTICIPE DO TORNEIO</span><h2><svg class="ic"><use href="#i-clipboard"></use></svg> INSCRIÇÕES</h2></div><p>Garanta sua participação no Torneio de Pênaltis Missão Calebe!</p></div>
-<div class="signup-notice"><strong>Inscrição: R$ 50,00 por dupla · Torneio: domingo, 20/12/2026</strong><span>Local: Colégio Machadinho — Caruaru/PE · Horário: 8h30</span><div class="venue-address-line">Rua Olegário Bezerra, s/n · São Francisco · CEP 55006-470</div><small>São 64 vagas no Juvenil e 64 vagas no Adulto. As inscrições encerram em 10/12/2026 às 23:59. Mesma premiação para Juvenil e Adulto: 1º lugar: R$ 300,00 + troféus · 2º lugar: R$ 150,00.</small><a class="venue-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Escola%20Municipal%20Professor%20Jos%C3%A9%20Flor%C3%AAncio%20Neto%20%28Professor%20Machadinho%29%2C%20Rua%20Oleg%C3%A1rio%20Bezerra%2C%20s/n%2C%20S%C3%A3o%20Francisco%2C%20Caruaru%2C%20PE%2C%2055006-470&amp;travelmode=driving" rel="noopener noreferrer" target="_blank">📍 Abrir no GPS ↗</a></div>
-<div class="registration-dashboard"><div class="countdown-card"><div class="countdown-label">CONTAGEM REGRESSIVA DAS INSCRIÇÕES</div><div class="countdown-grid"><div class="count-item"><strong id="count-months">0</strong><span>Meses</span></div><div class="count-item"><strong id="count-days">0</strong><span>Dias</span></div><div class="count-item"><strong id="count-hours">0</strong><span>Horas</span></div><div class="count-item"><strong id="count-minutes">0</strong><span>Minutos</span></div><div class="count-item"><strong id="count-seconds">0</strong><span>Segundos</span></div></div><small class="countdown-help">As inscrições ficam abertas até <b>10/12/2026 às 23:59</b>.</small></div><div class="slots-board"><div class="slot-card"><div class="slot-head"><strong>JUVENIL</strong><span id="juvenil-count">0/64</span></div><div class="slot-sub">14 a 15 anos</div><div class="slot-bar"><i id="juvenil-fill"></i></div><small id="juvenil-left">64 vagas disponíveis</small></div><div class="slot-card"><div class="slot-head"><strong>ADULTO</strong><span id="adulto-count">0/64</span></div><div class="slot-sub">16 anos em diante</div><div class="slot-bar"><i id="adulto-fill"></i></div><small id="adulto-left">64 vagas disponíveis</small></div></div><div aria-live="polite" class="deadline-warning" id="deadline-warning">Limite por categoria: 64 vagas. Contagem local (não sincronizada).</div></div>
+<div class="signup-notice"><strong>Inscrição: R$ 50,00 por dupla · Torneio: domingo, 20/12/2026</strong><span>Local: Colégio Machadinho — Caruaru/PE · Horário: 8h00</span><div class="venue-address-line">Rua Olegário Bezerra, s/n · São Francisco · CEP 55006-470</div><small>São 64 vagas no Juvenil e 64 vagas no Adulto. As inscrições encerram em 10/12/2026 às 23:59. Mesma premiação para Juvenil e Adulto: 1º lugar: R$ 300,00 + troféus · 2º lugar: R$ 150,00.</small><a class="venue-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Escola%20Municipal%20Professor%20Jos%C3%A9%20Flor%C3%AAncio%20Neto%20%28Professor%20Machadinho%29%2C%20Rua%20Oleg%C3%A1rio%20Bezerra%2C%20s/n%2C%20S%C3%A3o%20Francisco%2C%20Caruaru%2C%20PE%2C%2055006-470&amp;travelmode=driving" rel="noopener noreferrer" target="_blank">📍 Abrir no GPS ↗</a></div>
+<div class="registration-dashboard"><div class="countdown-card"><div class="countdown-label">CONTAGEM REGRESSIVA DAS INSCRIÇÕES</div><div class="countdown-grid"><div class="count-item"><strong id="count-months">0</strong><span>Meses</span></div><div class="count-item"><strong id="count-days">0</strong><span>Dias</span></div><div class="count-item"><strong id="count-hours">0</strong><span>Horas</span></div><div class="count-item"><strong id="count-minutes">0</strong><span>Minutos</span></div><div class="count-item"><strong id="count-seconds">0</strong><span>Segundos</span></div></div><small class="countdown-help">As inscrições ficam abertas até <b>10/12/2026 às 23:59</b>.</small></div><div class="slots-board"><div class="slot-card"><div class="slot-head"><strong>JUVENIL</strong><span id="juvenil-count">0/64</span></div><div class="slot-sub">14 a 15 anos</div><div class="slot-bar"><i id="juvenil-fill"></i></div><small id="juvenil-left">64 vagas disponíveis</small></div><div class="slot-card"><div class="slot-head"><strong>ADULTO</strong><span id="adulto-count">0/64</span></div><div class="slot-sub">16 anos em diante</div><div class="slot-bar"><i id="adulto-fill"></i></div><small id="adulto-left">64 vagas disponíveis</small></div></div></div>
 <div class="signup-panel">
 <aside class="signup-aside"><div class="signup-aside-title"><svg class="ic"><use href="#i-users"></use></svg><h3>Categorias do Torneio</h3></div><div class="category-item"><b>JUVENIL</b><span>De 14 a 15 anos · 64 vagas</span></div><div class="category-item"><b>ADULTO</b><span>De 16 anos em diante · 64 vagas</span></div><div class="category-note"><svg class="ic"><use href="#i-info"></use></svg><span>Informe a idade do jogador para definir sua categoria automaticamente. Após 10/12/2026, as inscrições serão bloqueadas.</span></div></aside>
 <form id="signup" novalidate="">
@@ -700,7 +735,7 @@ footer .footer-inner a:hover{color:#fff0b3!important}
 <div aria-live="polite" class="age-feedback" id="age-feedback" role="status">Juvenil: de 14 a 15 anos <span>•</span> Adulto: de 16 anos em diante.</div>
 <fieldset class="contato-escolha"><legend>Para quem deseja enviar sua inscrição? <em>*</em></legend><label class="contato-opcao"><input type="radio" name="destinatario" value="nelsiane" checked required/><span><strong>Nelsiane</strong><small>(81) 97332-4838</small></span></label><label class="contato-opcao"><input type="radio" name="destinatario" value="branca" required/><span><strong>Branca</strong><small>(81) 9236-3729</small></span></label></fieldset>
 <button class="btn btn-whatsapp" type="submit"><svg class="ic"><use href="#i-phone"></use></svg> ENVIAR INSCRIÇÃO PELO WHATSAPP <svg class="ic"><use href="#i-arrow"></use></svg></button>
-<p class="privacy">Escolha Nelsiane ou Branca. Ao clicar, o WhatsApp abrirá com sua inscrição preenchida para o contato selecionado. O envio só é concluído quando você tocar em <b>Enviar</b> no WhatsApp. A contagem demonstrativa é armazenada somente neste navegador e não representa as inscrições confirmadas pela organização. A inscrição só é enviada quando você confirmar no WhatsApp. O bloqueio por prazo funciona pelo relógio do dispositivo; para bloqueio central e vagas reais é necessário um serviço conectado.</p>
+<p class="privacy">Escolha Nelsiane ou Branca. Ao clicar, o WhatsApp abrirá com sua inscrição preenchida para o contato selecionado. O envio só é concluído quando você tocar em <b>Enviar</b> no WhatsApp. A contagem aumenta ao iniciar uma inscrição pelo formulário neste navegador, mesmo que a mensagem não seja enviada. Ela não representa inscrições confirmadas e não é compartilhada entre aparelhos. A inscrição só é enviada quando você confirmar no WhatsApp. O bloqueio por prazo funciona pelo relógio do dispositivo; para bloqueio central e vagas reais é necessário um serviço conectado.</p>
 <p class="form-feedback" hidden="" id="form-feedback" role="alert"></p>
 </form>
 </div>
@@ -708,11 +743,11 @@ footer .footer-inner a:hover{color:#fff0b3!important}
 
 
 <section class="view" data-view="categorias" hidden="" id="categorias"><div class="details-panel"><span class="eyebrow">DIVISÕES OFICIAIS</span><h2>Categorias do Torneio</h2><div class="details-cards"><article><svg class="ic"><use href="#i-users"></use></svg><h3>JUVENIL</h3><strong>14 a 15 anos</strong><p>A categoria é aplicada automaticamente para jogadores com 14 ou 15 anos. Limite de 64 vagas.</p></article><article><svg class="ic"><use href="#i-users"></use></svg><h3>ADULTO</h3><strong>16 anos ou mais</strong><p>Jogadores a partir dos 16 anos participam da categoria Adulto. Limite de 64 vagas.</p></article></div><button class="btn btn-neon" data-open="inscricoes" type="button">FAZER INSCRIÇÃO <svg class="ic"><use href="#i-arrow"></use></svg></button></div></section>
-<section class="view" data-view="regulamento" hidden="" id="regulamento"><div class="details-panel"><span class="eyebrow">INFORMAÇÕES DO EVENTO</span><h2>Regulamento</h2><p>O regulamento completo ainda será divulgado pela organização. Data do torneio: domingo, 20/12/2026. Horário: 8h30. Inscrição por dupla: R$ 50,00. Categorias Juvenil (14 a 15 anos) e Adulto (16 anos ou mais). São 64 vagas para Juvenil e 64 vagas para Adulto. O prazo final das inscrições é 10/12/2026 às 23:59, e após essa data o sistema bloqueia novas inscrições. Local: Colégio Machadinho (Escola Municipal Professor José Florêncio Neto), Rua Olegário Bezerra, s/n, São Francisco, Caruaru–PE, CEP 55006-470. <a class="venue-inline-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Escola%20Municipal%20Professor%20Jos%C3%A9%20Flor%C3%AAncio%20Neto%20%28Professor%20Machadinho%29%2C%20Rua%20Oleg%C3%A1rio%20Bezerra%2C%20s/n%2C%20S%C3%A3o%20Francisco%2C%20Caruaru%2C%20PE%2C%2055006-470&amp;travelmode=driving" rel="noopener noreferrer" target="_blank">Abrir no GPS</a>.</p><a class="btn btn-outline" href="https://wa.me/5581973324838" rel="noopener noreferrer" target="_blank">Nelsiane — TIRAR DÚVIDAS <svg class="ic"><use href="#i-arrow"></use></svg></a></div></section>
+<section class="view" data-view="regulamento" hidden="" id="regulamento"><div class="details-panel"><span class="eyebrow">INFORMAÇÕES DO EVENTO</span><h2>Regulamento</h2><p>O regulamento completo ainda será divulgado pela organização. Data do torneio: domingo, 20/12/2026. Horário: 8h00. Inscrição por dupla: R$ 50,00. Categorias Juvenil (14 a 15 anos) e Adulto (16 anos ou mais). São 64 vagas para Juvenil e 64 vagas para Adulto. O prazo final das inscrições é 10/12/2026 às 23:59, e após essa data o sistema bloqueia novas inscrições. Local: Colégio Machadinho (Escola Municipal Professor José Florêncio Neto), Rua Olegário Bezerra, s/n, São Francisco, Caruaru–PE, CEP 55006-470. <a class="venue-inline-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Escola%20Municipal%20Professor%20Jos%C3%A9%20Flor%C3%AAncio%20Neto%20%28Professor%20Machadinho%29%2C%20Rua%20Oleg%C3%A1rio%20Bezerra%2C%20s/n%2C%20S%C3%A3o%20Francisco%2C%20Caruaru%2C%20PE%2C%2055006-470&amp;travelmode=driving" rel="noopener noreferrer" target="_blank">Abrir no GPS</a>.</p><a class="btn btn-outline" href="https://wa.me/5581973324838" rel="noopener noreferrer" target="_blank">Nelsiane — TIRAR DÚVIDAS <svg class="ic"><use href="#i-arrow"></use></svg></a></div></section>
 <section class="view" data-view="tabela" hidden="" id="tabela"><div class="details-panel"><span class="eyebrow">ACOMPANHE O TORNEIO</span><h2>Tabela de partidas</h2><p>A tabela dos confrontos será divulgada pela organização.</p></div></section>
 <section class="view" data-view="premiacao" hidden="" id="premiacao"><div class="details-panel"><span class="eyebrow">A HORA DA VITÓRIA</span><h2>Premiação</h2><p>As premiações são <strong>iguais para as categorias Juvenil e Adulto</strong>.</p>
 <div class="award-grid"><div class="award-card first"><span>🏆 1º LUGAR</span><strong>PIX DE R$ 300,00</strong><small>+ TROFÉUS</small></div><div class="award-card second"><span>🥈 2º LUGAR</span><strong>PIX DE R$ 150,00</strong></div></div>
-<p class="award-location">Local: <b>Colégio Machadinho — Rua Olegário Bezerra, s/n, São Francisco, Caruaru</b> · Domingo, <b>20/12/2026</b> às <b>08h30</b> · Inscrição por dupla: <b>R$ 50,00</b> <a class="venue-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Escola%20Municipal%20Professor%20Jos%C3%A9%20Flor%C3%AAncio%20Neto%20%28Professor%20Machadinho%29%2C%20Rua%20Oleg%C3%A1rio%20Bezerra%2C%20s/n%2C%20S%C3%A3o%20Francisco%2C%20Caruaru%2C%20PE%2C%2055006-470&amp;travelmode=driving" rel="noopener noreferrer" target="_blank">📍 Abrir no GPS</a></p><img alt="Troféu dourado do campeonato" class="prize-img" height="263" src="imagens/trofeu-premiacao.webp" width="465"/></div></section>
+<p class="award-location">Local: <b>Colégio Machadinho — Rua Olegário Bezerra, s/n, São Francisco, Caruaru</b> · Domingo, <b>20/12/2026</b> às <b>08h00</b> · Inscrição por dupla: <b>R$ 50,00</b> <a class="venue-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=Escola%20Municipal%20Professor%20Jos%C3%A9%20Flor%C3%AAncio%20Neto%20%28Professor%20Machadinho%29%2C%20Rua%20Oleg%C3%A1rio%20Bezerra%2C%20s/n%2C%20S%C3%A3o%20Francisco%2C%20Caruaru%2C%20PE%2C%2055006-470&amp;travelmode=driving" rel="noopener noreferrer" target="_blank">📍 Abrir no GPS</a></p><img alt="Troféu dourado do campeonato" class="prize-img" height="263" src="imagens/trofeu-premiacao.webp" width="465"/></div></section>
 </div>
 <section class="view" data-view="administracao" hidden id="administracao"><div class="details-panel"><span class="eyebrow">ÁREA DA ORGANIZAÇÃO</span><h2>ADM — Ajustar vagas de teste</h2><p>Escolha a categoria e quantas inscrições de teste deseja remover da contagem deste navegador.</p><details class="adjustment-panel" id="ajuste-vagas" open>
 <summary>Organização — ajustar inscrições de teste</summary>
@@ -764,6 +799,55 @@ footer .footer-inner a:hover{color:#fff0b3!important}
   const LIMITES = { Juvenil: 64, Adulto: 64 };
   const COUNTS_KEY = 'calebe_inscricoes_contagem_v1';
   const ENTRIES_KEY = 'calebe_inscricoes_itens_v1';
+
+
+
+
+
+
+  // ======================================================================
+  // ======================================================================
+  //
+  //           AQUI VOCE ZERA AS INSCRICOES DE TESTE
+  //
+  //  COMO USAR:
+  //
+  //  1) DEIXE 0 PARA NAO APAGAR NADA.
+  //  2) DEPOIS DE FAZER INSCRICOES PARA TESTAR, MUDE 0 PARA 1.
+  //  3) SALVE O ARQUIVO (CTRL + S) E ATUALIZE O SITE (CTRL + F5).
+  //     A CONTAGEM VOLTA PARA: JUVENIL 0/64 E ADULTO 0/64.
+  //  4) PARA ZERAR NOVAMENTE NO FUTURO, MUDE 1 PARA 2, DEPOIS 3,
+  //     4, 5... CADA NUMERO NOVO ZERA UMA UNICA VEZ NO NAVEGADOR.
+  //
+  //  IMPORTANTE: APAGA APENAS TESTES SALVOS NESTE NAVEGADOR.
+  //  NAO APAGA MENSAGENS JA ENVIADAS PELO WHATSAPP.
+  //  NAO ALTERA INSCRICOES QUE ESTEJAM EM OUTROS APARELHOS.
+  //
+  //                     ALTERE SO ESTE NUMERO:
+  const VERSAO_ZERAR_TESTES = 1;
+  //
+  // ======================================================================
+  // ======================================================================
+
+  // Executa a limpeza somente uma vez por numero escolhido acima.
+  // A chave de controle e salva no proprio navegador.
+  if (Number.isInteger(VERSAO_ZERAR_TESTES) && VERSAO_ZERAR_TESTES > 0) {
+    try {
+      const chaveExecucao = 'calebe_reset_testes_versao';
+      const ultimaVersao = Number(localStorage.getItem(chaveExecucao) || '0');
+      if (VERSAO_ZERAR_TESTES > ultimaVersao) {
+        localStorage.removeItem(COUNTS_KEY);
+        localStorage.removeItem(ENTRIES_KEY);
+        localStorage.setItem(chaveExecucao, String(VERSAO_ZERAR_TESTES));
+      }
+    } catch (_) { /* O navegador pode bloquear o armazenamento local. */ }
+  }
+
+
+
+
+
+
 
   function viewFromHash() {
     const name = decodeURIComponent(location.hash.slice(1));
@@ -915,7 +999,7 @@ footer .footer-inner a:hover{color:#fff0b3!important}
     } else {
       message = 'Inscrições até 10/12/2026 às 23:59. O bloqueio de 64 vagas vale apenas para os dados deste navegador.';
     }
-    deadlineWarning.textContent = message;
+    if (deadlineWarning) deadlineWarning.textContent = message;
     submitButton.disabled = isDeadlineClosed() || allFull || (categoryInput.value && isCategoryFull(categoryInput.value));
   }
   window.addEventListener('storage', (event) => {
@@ -1025,6 +1109,8 @@ footer .footer-inner a:hover{color:#fff0b3!important}
   form.addEventListener('submit', event => {
     event.preventDefault();
     feedback.hidden = true;
+    feedback.textContent = "";
+    feedback.classList.remove("success");
     const fields = [
       ['responsavel', 'nome do responsável'],
       ['time', 'nome do time'],
@@ -1045,21 +1131,16 @@ footer .footer-inner a:hover{color:#fff0b3!important}
     if (isCategoryFull(category)) { showError(`As 64 vagas da categoria ${category} já foram preenchidas neste navegador. Inscrições bloqueadas.`, ageInput); return; }
 
     const lines = [
-      '*DE PÊNALTIS MISSÃO CALEBE*',
+      'DE PÊNALTIS MISSÃO CALEBE',
       '',
-      `*Responsável:* ${trim('responsavel')}`,
-      `*Telefone do responsável:* ${formatPhone(digits)}`,
-      `*Nome do time:* ${trim('time')}`,
-      `*Nome do jogador:* ${trim('jogador')}`,
-      `*Nome do goleiro:* ${trim('goleiro')}`,
-      `*Idade do jogador:* ${age} anos`,
-      `*Categoria:* ${category}`,
-      ...(trim('igreja') ? [`*Igreja:* ${trim('igreja')}`] : []),
-      `*Data do torneio:* Domingo, 20/12/2026`,
-      `*Horário do torneio:* 08h30`,
-      `*Local do torneio:* Colégio Machadinho - Caruaru/PE`,
-      `*Fim das inscrições:* 10/12/2026`,
-      `*Vagas da categoria:* ${LIMITES[category]} vagas`
+      `Responsável: ${trim('responsavel')}`,
+      `Telefone do responsável: ${formatPhone(digits)}`,
+      `Nome do time: ${trim('time')}`,
+      `Nome do jogador: ${trim('jogador')}`,
+      `Nome do goleiro: ${trim('goleiro')}`,
+      `Idade do jogador: ${age} anos`,
+      `Categoria: ${category}`,
+      ...(trim('igreja') ? [`Igreja: ${trim('igreja')}`] : [])
     ];
     const destinatario = form.querySelector('input[name="destinatario"]:checked')?.value;
     const contato = CONTATOS_INSCRICAO[destinatario];
@@ -1067,9 +1148,26 @@ footer .footer-inner a:hover{color:#fff0b3!important}
     const url = `https://wa.me/${contato.numero}?text=${encodeURIComponent(lines.join('\n'))}`;
     feedback.hidden = false;
     feedback.classList.add('success');
-    // Não alterar o contador ao simplesmente abrir uma conversa no WhatsApp.
-    // O site estático não recebe confirmação de envio ou cadastro do WhatsApp.
-    feedback.textContent = `Abrindo o WhatsApp de ${contato.nome}. A inscrição só será enviada quando você tocar em Enviar no WhatsApp. Abrir o WhatsApp não ocupa uma vaga.`;
+    // Contagem local da solicitação iniciada neste navegador. Não comprova envio no WhatsApp.
+    const registrationKey = [category, digits, trim('time').toLowerCase(), trim('jogador').toLowerCase(), trim('goleiro').toLowerCase()].join('|');
+    const duplicate = Object.prototype.hasOwnProperty.call(entries, registrationKey);
+    if (!duplicate) {
+      const previous = counts[category];
+      counts[category] = Math.min(LIMITES[category], previous + 1);
+      entries[registrationKey] = {category, responsavel:trim('responsavel'), telefone:formatPhone(digits), time:trim('time'), jogador:trim('jogador'), goleiro:trim('goleiro'), idade:age, igreja:trim('igreja'), createdAt:new Date().toISOString()};
+      try {
+        persistCounters();
+        updateSlotBoard();
+      } catch (_) {
+        counts[category] = previous;
+        delete entries[registrationKey];
+        feedback.classList.remove('success');
+        feedback.textContent = 'O WhatsApp será aberto, mas não foi possível salvar a contagem neste navegador.';
+      }
+    }
+    if (!feedback.textContent) feedback.textContent = duplicate
+      ? `Este cadastro já foi contado neste navegador. Abrindo o WhatsApp de ${contato.nome}.`
+      : `Solicitação registrada neste navegador. Abrindo o WhatsApp de ${contato.nome}. Confirme o envio no WhatsApp.`;
     const oldLink = document.getElementById('manual-whatsapp-link');
     if (oldLink) oldLink.remove();
     const manualLink = document.createElement('a');
@@ -1082,13 +1180,30 @@ footer .footer-inner a:hover{color:#fff0b3!important}
     feedback.appendChild(document.createElement('br'));
     feedback.appendChild(manualLink);
 
-    // A inscrição abre diretamente no WhatsApp, sem cena obrigatória.
-    window.location.assign(url);
+    // Contagem feita no envio do formulário; a mensagem ainda precisa ser enviada no WhatsApp.
+    const loading = document.getElementById('whatsapp-loading');
+    submitButton.disabled = true;
+    loading.hidden = false;
+    loading.classList.remove('is-running');
+    // Reinicia a animação quando houver uma nova tentativa.
+    void loading.offsetWidth;
+    loading.classList.add('is-running');
+    setTimeout(() => { window.location.assign(url); }, 4000);
   });
 })();
 
 </script>
 <script>
 </script>
+<div id="whatsapp-loading" class="wa-loading" hidden role="dialog" aria-modal="true" aria-labelledby="wa-loading-title">
+  <div class="wa-loading-card">
+    <div class="wa-loading-mark">⚽ MISSÃO CALEBE</div>
+    <div class="wa-loading-symbol" aria-hidden="true">⚽</div>
+    <h2 id="wa-loading-title">Preparando inscrição</h2>
+    <p>Você será direcionado ao WhatsApp para enviar a mensagem.</p>
+    <div class="wa-loading-track" role="progressbar" aria-label="Abrindo WhatsApp em 4 segundos"><div class="wa-loading-progress"></div></div>
+    <small>ABRINDO WHATSAPP...</small>
+  </div>
+</div>
 </body>
 </html>
