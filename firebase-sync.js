@@ -1,4 +1,5 @@
-// Missão Calebe — contador central. Dados pessoais NÃO são enviados ao Firestore.
+// Missão Calebe — contagem compartilhada e independente por categoria.
+// Os dados pessoais da inscrição são enviados somente para o WhatsApp, não para o Firestore.
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js';
 import { getAuth, signInAnonymously } from 'https://www.gstatic.com/firebasejs/13.1.0/firebase-auth.js';
 import { getFirestore, doc, onSnapshot, runTransaction } from 'https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js';
@@ -19,42 +20,49 @@ const refs = {
   Juvenil: doc(db, 'contadores', 'juvenil'),
   Adulto: doc(db, 'contadores', 'adulto')
 };
-const latest = {Juvenil:null, Adulto:null};
+const latest = {
+  Juvenil: { inscritos: null, server: false, error: '' },
+  Adulto: { inscritos: null, server: false, error: '' }
+};
 let signedIn = false;
-let error = '';
+let authError = '';
+
+const docName = category => category.toLowerCase();
+function validCounter(data) {
+  return data && typeof data.inscritos === 'number' && Number.isInteger(data.inscritos)
+    && data.inscritos >= 0 && data.inscritos <= 64
+    && typeof data.limite === 'number' && data.limite === 64;
+}
 
 function broadcast() {
-  const valid = Object.values(latest).every(v => v && v.server && Number.isFinite(v.inscritos) && v.limite === 64);
-  const ready = signedIn && !error && valid;
+  const readyByCategory = {};
+  const errors = {};
+  const counts = {};
+  for (const category of Object.keys(refs)) {
+    const value = latest[category];
+    readyByCategory[category] = signedIn && !authError && value.server && !value.error;
+    errors[category] = authError || value.error;
+    counts[category] = typeof value.inscritos === 'number' ? value.inscritos : null;
+  }
   window.dispatchEvent(new CustomEvent('calebe-firebase-state', {
-    detail: {
-      ready,
-      error,
-      counts: {
-        Juvenil: latest.Juvenil?.inscritos ?? 0,
-        Adulto: latest.Adulto?.inscritos ?? 0
-      }
-    }
+    detail: { readyByCategory, errors, counts }
   }));
 }
 
 window.CalebeFirebase = {
   async reserve(category) {
-    if (!signedIn || error || !latest.Juvenil?.server || !latest.Adulto?.server) {
-      throw Object.assign(new Error('Sem conexão com o Firebase'), {code:'unavailable'});
-    }
     const ref = refs[category];
     if (!ref) throw Object.assign(new Error('Categoria inválida'), {code:'invalid-argument'});
+    if (!signedIn || authError || !latest[category].server || latest[category].error) {
+      throw Object.assign(new Error(latest[category].error || authError || 'Contador indisponível'), {code:'unavailable'});
+    }
     await runTransaction(db, async (transaction) => {
       const snapshot = await transaction.get(ref);
-      if (!snapshot.exists()) throw Object.assign(new Error('Contador não existe no Firebase'), {code:'not-found'});
+      if (!snapshot.exists()) throw Object.assign(new Error('Documento não encontrado'), {code:'not-found'});
       const data = snapshot.data();
-      const current = Number(data.inscritos);
-      if (Number(data.limite) !== 64 || !Number.isInteger(current) || current < 0 || current > 64) {
-        throw Object.assign(new Error('Dados inválidos no contador'), {code:'failed-precondition'});
-      }
-      if (current >= 64) throw Object.assign(new Error('Vagas esgotadas'), {code:'vagas-esgotadas'});
-      transaction.update(ref, {inscritos: current+1});
+      if (!validCounter(data)) throw Object.assign(new Error('Campos inválidos no contador da categoria'), {code:'failed-precondition'});
+      if (data.inscritos >= 64) throw Object.assign(new Error('Vagas esgotadas'), {code:'vagas-esgotadas'});
+      transaction.update(ref, { inscritos: data.inscritos + 1 });
     });
   }
 };
@@ -65,31 +73,37 @@ async function initialize() {
     signedIn = true;
     for (const [category, ref] of Object.entries(refs)) {
       onSnapshot(ref, {includeMetadataChanges:true}, (snapshot) => {
+        const value = latest[category];
         if (!snapshot.exists()) {
-          error = `Falta o documento ${category.toLowerCase()} em contadores, no Firebase.`;
+          value.inscritos = null;
+          value.server = false;
+          value.error = `Falta o documento contadores/${docName(category)} no Firestore.`;
           broadcast();
           return;
         }
         const data = snapshot.data();
-        const inscritos = Number(data.inscritos);
-        const limite = Number(data.limite);
-        if (!Number.isInteger(inscritos) || inscritos < 0 || inscritos > 64 || limite !== 64) {
-          error = `Confira os campos inscritos e limite do documento ${category.toLowerCase()} no Firestore.`;
-        } else if (error.startsWith('Confira os campos') || error.startsWith('Falta o documento')) {
-          error = '';
+        if (!validCounter(data)) {
+          value.inscritos = null;
+          value.server = false;
+          value.error = `Corrija contadores/${docName(category)} no Firebase: "inscritos" deve ser número de 0 a 64 e "limite" deve ser número 64 (tipo double ou integer).`;
+        } else {
+          value.inscritos = data.inscritos;
+          value.server = !snapshot.metadata.fromCache && !snapshot.metadata.hasPendingWrites;
+          value.error = '';
         }
-        latest[category] = {inscritos, limite, server:!snapshot.metadata.fromCache};
         broadcast();
       }, (reason) => {
-        error = 'Erro ao ler o Firestore. Confira as regras e a conexão com a internet.';
-        console.error('Calebe Firebase:',reason);
+        const value = latest[category];
+        value.server = false;
+        value.error = `Não foi possível ler contadores/${docName(category)}. Confira as regras do Firestore e a conexão.`;
+        console.error('Calebe Firebase:', category, reason);
         broadcast();
       });
     }
     broadcast();
   } catch (reason) {
-    console.error('Calebe Firebase:',reason);
-    error = 'Não foi possível autenticar no Firebase. Confira Authentication > Anônimo e a conexão.';
+    console.error('Calebe Firebase:', reason);
+    authError = 'Falha na autenticação anônima do Firebase. Verifique Authentication > Método de login > Anônimo.';
     broadcast();
   }
 }
