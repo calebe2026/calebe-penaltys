@@ -614,6 +614,32 @@ body:has(.faithful-poster:not([hidden])){background:#210e08!important}
 .header .nav.open{background:#2a1109!important;border:1px solid rgba(234,179,69,.5)!important}
 @media(max-width:800px){.header .nav{background:#2a1109!important}}
 
+
+/* PREMIAÇÃO: um painel único cobre INTEGRALMENTE os textos impressos na arte.
+   O troféu, a borda dourada e a seta do cartaz permanecem visíveis. */
+.faithful-frame{container-type:inline-size}
+.faithful-frame .poster-prize-details{
+  position:absolute; z-index:5; pointer-events:none;
+  left:17.35%; top:69.03%; width:26.25%; height:4.80%;
+  box-sizing:border-box; display:flex; flex-direction:column;
+  align-items:flex-start; justify-content:center;
+  padding:0 .55cqw; border:1px solid rgba(247,183,70,.48);
+  border-radius:clamp(6px,1.1cqw,12px);
+  background:linear-gradient(105deg,#351608 0%,#301206 50%,#351807 100%);
+  box-shadow:inset 0 1px 1px rgba(255,220,152,.08),0 0 7px rgba(23,8,3,.3);
+  font-family:Arial,Helvetica,sans-serif; color:#fff5e4;
+  text-shadow:0 1px 2px #1a0904; white-space:nowrap;
+}
+.faithful-frame .poster-prize-details strong{
+  display:block; font-weight:900; color:#ffd373;
+  font-size:clamp(10px,2.23cqw,17px); line-height:1.12;
+  margin-bottom:.28cqw;
+}
+.faithful-frame .poster-prize-details span{
+  display:block; font-size:clamp(8px,1.67cqw,12.5px);
+  font-weight:800; line-height:1.24;
+}
+
 </style>
 
 <style id="rodape-e-relogio-ouro">
@@ -682,6 +708,7 @@ footer .footer-inner a:hover{color:#fff0b3!important}
 <div class="poster-time-fix" aria-label="Horário de início: 8 horas"><span>HORÁRIO</span><strong>08h00</strong></div>
 <a aria-label="Ver categorias" class="faithful-hotspot faithful-categories" href="#categorias"></a>
 <a aria-label="Ver regulamento" class="faithful-hotspot faithful-rules" href="#regulamento"></a>
+<span class="poster-prize-details" aria-label="Premiação: primeiro lugar, R$ 300 e troféus; segundo lugar, R$ 150, para Juvenil e Adulto"><strong>PREMIAÇÃO</strong><span>1º R$ 300 + troféus</span><span>2º R$ 150</span></span>
 <a aria-label="Ver premiação" class="faithful-hotspot faithful-awards" href="#premiacao"></a>
 <a aria-label="Ir para inscrições" class="faithful-hotspot faithful-signups-card" href="#inscricoes"></a>
 </div>
