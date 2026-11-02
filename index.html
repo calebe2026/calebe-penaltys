@@ -733,7 +733,7 @@ footer .footer-inner a:hover{color:#fff0b3!important}
 <div class="field"><label for="time">Nome do time <em>*</em></label><div class="input-shell"><svg class="ic"><use href="#i-users"></use></svg><input id="time" maxlength="100" name="time" placeholder="Nome do time" required="" type="text"/></div></div>
 <div class="field"><label for="jogador">Nome do jogador <em>*</em></label><div class="input-shell"><svg class="ic"><use href="#i-user"></use></svg><input id="jogador" maxlength="100" name="jogador" placeholder="Nome do jogador" required="" type="text"/></div></div>
 <div class="field"><label for="goleiro">Nome do goleiro <em>*</em></label><div class="input-shell"><svg class="ic"><use href="#i-shield"></use></svg><input id="goleiro" maxlength="100" name="goleiro" placeholder="Nome do goleiro" required="" type="text"/></div></div>
-<div class="field"><label for="idade">Idade do jogador <em>*</em></label><div class="input-shell"><svg class="ic"><use href="#i-calendar"></use></svg><input id="idade" inputmode="numeric" max="120" min="14" name="idade" placeholder="Ex.: 16" required="" step="1" type="number"/></div></div>
+<div class="field"><label for="idade">Idade do jogador <em>*</em></label><div class="input-shell"><svg class="ic"><use href="#i-calendar"></use></svg><input id="idade" inputmode="numeric" name="idade" autocomplete="off" placeholder="Ex.: 16" aria-describedby="age-feedback" required="" type="text" maxlength="8"/></div></div>
 <div class="field field-full"><label for="igreja">Nome da igreja <small>(opcional)</small></label><div class="input-shell"><svg class="ic"><use href="#i-info"></use></svg><input id="igreja" name="igreja" maxlength="120" placeholder="Se participar de alguma igreja, informe o nome" type="text"/></div></div>
 <div class="field field-full"><label for="categoria">Categoria (calculada automaticamente)</label><div class="input-shell input-shell-locked"><svg class="ic"><use href="#i-check"></use></svg><input id="categoria" name="categoria" placeholder="Informe a idade para identificar a categoria" readonly="" type="text"/></div></div>
 </div>
@@ -855,36 +855,44 @@ footer .footer-inner a:hover{color:#fff0b3!important}
   }
   let counts = { Juvenil: 0, Adulto: 0 };
   let entries = safeLoad(ENTRIES_KEY, {}); // Apenas para evitar novo clique duplicado neste navegador.
-  let onlineReady = false;
-  let onlineError = '';
+  // Cada categoria pode operar independentemente; erro em Adulto não bloqueia Juvenil.
+  let onlineReady = { Juvenil: false, Adulto: false };
+  let onlineErrors = { Juvenil: '', Adulto: '' };
   let sending = false;
   const syncLabel = document.getElementById('firebase-status');
   function formatRemainingText(category) {
-    if (!onlineReady) return 'Conectando ao contador online…';
+    if (!onlineReady[category]) return onlineErrors[category] ? 'Categoria indisponível: verifique o Firebase' : 'Conectando ao contador online…';
     const remaining = Math.max(0, LIMITES[category] - counts[category]);
     return remaining === 0 ? 'Vagas esgotadas' : `${remaining} vagas disponíveis`;
   }
   function updateSlotBoard() {
-    juvenileCount.textContent = onlineReady ? `${counts.Juvenil}/64` : '—/64';
-    adultCount.textContent = onlineReady ? `${counts.Adulto}/64` : '—/64';
-    juvenileFill.style.width = onlineReady ? `${Math.min(100, 100 * counts.Juvenil / 64)}%` : '0%';
-    adultFill.style.width = onlineReady ? `${Math.min(100, 100 * counts.Adulto / 64)}%` : '0%';
+    juvenileCount.textContent = onlineReady.Juvenil ? `${counts.Juvenil}/64` : '—/64';
+    adultCount.textContent = onlineReady.Adulto ? `${counts.Adulto}/64` : '—/64';
+    juvenileFill.style.width = onlineReady.Juvenil ? `${Math.min(100, 100 * counts.Juvenil / 64)}%` : '0%';
+    adultFill.style.width = onlineReady.Adulto ? `${Math.min(100, 100 * counts.Adulto / 64)}%` : '0%';
     juvenileLeft.textContent = formatRemainingText('Juvenil');
     adultLeft.textContent = formatRemainingText('Adulto');
   }
   window.addEventListener('calebe-firebase-state', (event) => {
     const state = event.detail || {};
-    onlineReady = Boolean(state.ready);
-    onlineError = state.error || '';
-    if (state.counts) {
-      counts.Juvenil = Math.max(0, Math.min(64, Number(state.counts.Juvenil) || 0));
-      counts.Adulto = Math.max(0, Math.min(64, Number(state.counts.Adulto) || 0));
+    for (const category of ['Juvenil', 'Adulto']) {
+      onlineReady[category] = Boolean(state.readyByCategory?.[category]);
+      onlineErrors[category] = String(state.errors?.[category] || '');
+      if (onlineReady[category] && Number.isInteger(state.counts?.[category])) {
+        counts[category] = state.counts[category];
+      }
     }
     if (syncLabel) {
-      syncLabel.textContent = onlineReady
-        ? 'Vagas sincronizadas em tempo real entre celular e computador.'
-        : (onlineError || 'Conectando ao contador de vagas…');
-      syncLabel.classList.toggle('sync-error', Boolean(onlineError));
+      const broken = ['Juvenil', 'Adulto'].filter(category => onlineErrors[category]);
+      const ok = ['Juvenil', 'Adulto'].filter(category => onlineReady[category]);
+      syncLabel.textContent = broken.length
+        ? broken.map(category => onlineErrors[category]).join(' | ')
+        : ok.length === 2
+          ? 'Vagas Juvenil e Adulto sincronizadas em tempo real entre celular e computador.'
+          : ok.length === 1
+            ? `${ok[0]} sincronizado. Aguardando contador da outra categoria…`
+            : 'Conectando aos contadores online…';
+      syncLabel.classList.toggle('sync-error', broken.length > 0);
     }
     updateSlotBoard();
     updateRegistrationState();
@@ -940,9 +948,10 @@ footer .footer-inner a:hover{color:#fff0b3!important}
   }
   function updateRegistrationState() {
     if (deadlineWarning) deadlineWarning.hidden = true;
-    submitButton.disabled = sending || !onlineReady || isDeadlineClosed()
-      || (isCategoryFull('Juvenil') && isCategoryFull('Adulto'))
-      || (Boolean(categoryInput.value) && isCategoryFull(categoryInput.value));
+    const category = categoryForAge(readPlayerAge());
+    submitButton.disabled = sending || isDeadlineClosed()
+      || (Boolean(category) && (!onlineReady[category] || isCategoryFull(category)))
+      || (!category && !onlineReady.Juvenil && !onlineReady.Adulto);
   }
 
   updateSlotBoard();
@@ -950,33 +959,43 @@ footer .footer-inner a:hover{color:#fff0b3!important}
   updateRegistrationState();
   setInterval(() => {updateCountdown(); updateRegistrationState();}, 1000);
 
-  function categoryFromAge(raw) {
-    const value = String(raw).trim();
-    if (!/^\d{1,3}$/.test(value)) return '';
-    const age = Number(value);
-    if (age >= 14 && age <= 15) return 'Juvenil';
-    if (age >= 16 && age <= 120) return 'Adulto';
-    return '';
+  // Idade lida diretamente do campo no envio, sem depender de atualizações
+  // anteriores da categoria ou de peculiaridades do input type=number.
+  function readPlayerAge() {
+    const typed = String(ageInput.value || '').trim().normalize('NFKC');
+    const match = typed.match(/^(\d{1,3})(?:\s*anos?)?$/i);
+    if (!match) return null;
+    const age = Number(match[1]);
+    return Number.isInteger(age) && age >= 14 && age <= 120 ? age : null;
+  }
+  function categoryForAge(age) {
+    if (age === null) return '';
+    return age <= 15 ? 'Juvenil' : 'Adulto';
   }
   function updateCategory() {
-    const raw = ageInput.value.trim();
-    categoryInput.value = categoryFromAge(raw);
+    const typed = String(ageInput.value || '').trim();
+    const category = categoryForAge(readPlayerAge());
+    categoryInput.value = category;
     ageFeedback.classList.remove('error','success');
-    if (!raw) {
+    if (!typed) {
       ageFeedback.innerHTML = 'Juvenil: de 14 a 15 anos <span>•</span> Adulto: de 16 anos em diante.';
-    } else if (!categoryInput.value) {
-      ageFeedback.textContent = 'Idade inválida. Para participar, o jogador deve ter 14 anos ou mais.';
+    } else if (!category) {
+      ageFeedback.textContent = 'Informe uma idade válida (ex.: 18). O jogador deve ter 14 anos ou mais.';
       ageFeedback.classList.add('error');
-    } else if (isCategoryFull(categoryInput.value)) {
-      ageFeedback.textContent = `Categoria definida automaticamente: ${categoryInput.value}. Porém, as 64 vagas dessa categoria já foram preenchidas.`;
+    } else if (!onlineReady[category] && onlineErrors[category]) {
+      ageFeedback.textContent = `Categoria: ${category}. Há um problema no contador dessa categoria no Firebase. Veja a mensagem de sincronização acima.`;
+      ageFeedback.classList.add('error');
+    } else if (isCategoryFull(category) && onlineReady[category]) {
+      ageFeedback.textContent = `Categoria definida automaticamente: ${category}. Porém, as 64 vagas dessa categoria já foram preenchidas.`;
       ageFeedback.classList.add('error');
     } else {
-      ageFeedback.textContent = `Categoria definida automaticamente: ${categoryInput.value}.`;
+      ageFeedback.textContent = `Categoria definida automaticamente: ${category}.`;
       ageFeedback.classList.add('success');
     }
     updateRegistrationState();
   }
   ageInput.addEventListener('input', updateCategory);
+  ageInput.addEventListener('change', updateCategory);
   updateCategory();
 
   function formatPhone(raw) {
@@ -1015,13 +1034,17 @@ footer .footer-inner a:hover{color:#fff0b3!important}
     }
     const digits = phoneInput.value.replace(/\D/g, '');
     if (!/^\d{10,11}$/.test(digits)) { showError('Informe um telefone válido com DDD (10 ou 11 números).',phoneInput); return; }
-    const age = Number(ageInput.value);
-    if (!Number.isInteger(age) || age < 14 || age > 120) { showError('A idade precisa ser um número inteiro de 14 anos ou mais.',ageInput); return; }
+    const age = readPlayerAge();
+    if (age === null) { showError('Informe a idade do jogador corretamente (ex.: 18). A idade mínima é 14 anos.',ageInput); return; }
     if (isDeadlineClosed()) { showError('As inscrições foram encerradas em 10/12/2026 às 23:59.', submitButton); return; }
-    if (!onlineReady || !window.CalebeFirebase) { showError('O contador online está indisponível. Verifique a conexão e atualize a página. Nenhuma vaga foi contabilizada.', submitButton); return; }
+    // Calcula a categoria diretamente pela idade informada no formulário.
+    const category = categoryForAge(age);
+    categoryInput.value = category;
     updateCategory();
-    const category = categoryInput.value;
-    if (!category) { showError('Não foi possível determinar a categoria. Confira a idade.',ageInput); return; }
+    if (!window.CalebeFirebase || !onlineReady[category]) {
+      showError(onlineErrors[category] || `O contador online da categoria ${category} está indisponível. Verifique o Firebase e atualize a página.`, ageInput);
+      return;
+    }
     if (isCategoryFull(category)) { showError(`As 64 vagas da categoria ${category} já foram preenchidas. Inscrições bloqueadas.`, ageInput); return; }
 
     const lines = [
@@ -1057,7 +1080,9 @@ footer .footer-inner a:hover{color:#fff0b3!important}
         if (error?.code === 'vagas-esgotadas') {
           showError(`As 64 vagas da categoria ${category} já foram preenchidas.`, ageInput);
         } else if (error?.code === 'permission-denied') {
-          showError('O Firestore não autorizou o registro. Publique as regras que acompanham o ZIP e confira o prazo das inscrições.', submitButton);
+          showError('O Firestore recusou a inscrição. Confira as regras publicadas, o prazo e os campos do documento '+category.toLowerCase()+'.', submitButton);
+        } else if (error?.code === 'failed-precondition' || error?.code === 'not-found') {
+          showError('Confira contadores/'+category.toLowerCase()+' no Firestore: "inscritos" deve ser um número de 0 a 64 e "limite" deve ser o número 64.', submitButton);
         } else {
           showError('Falha ao registrar no contador online. Verifique a internet e as regras do Firebase. Nenhuma inscrição foi contada.', submitButton);
         }
