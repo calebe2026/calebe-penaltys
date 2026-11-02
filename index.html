@@ -2,6 +2,7 @@
 
 
 <html lang="pt-BR">
+<!-- VERSÃO: 2026-11-02-INSCRICAO-SOMENTE-DADOS-IDADE-DO-GOLEIRO -->
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
@@ -11,6 +12,8 @@
 <title>Missão Calebe | Torneio de Pênaltis</title>
 <link href="imagens/logo-calebe.png" rel="icon" type="image/png"/>
 <style>
+.goleiro-feedback{display:block;color:#dad0b5;font-size:12px;line-height:1.5}
+.goleiro-feedback.error{color:#ffaca2;font-weight:800}
 :root{--navy:#03152b;--blue:#052d4a;--deep:#010f1e;--panel:#05233a;--lime:#7fff00;--mint:#b2ff37;--muted:#aec1cf;--line:rgba(132,255,30,.55);--radius:19px;--max:1510px}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at 50% 0,#0b3959 0,#06182b 45%,#020f1b 100%);color:#f8fff8;font-family:Inter,"Segoe UI",Arial,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}button,input,a{font:inherit}a{color:inherit;text-decoration:none}button{cursor:pointer}button:disabled{cursor:not-allowed}.svg-library{height:0;width:0;position:absolute;overflow:hidden}.ic{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}.wrap{width:min(var(--max),calc(100% - 72px));margin:auto}[hidden]{display:none!important}
 /* Header */
@@ -835,7 +838,7 @@ footer .footer-inner a:hover{color:#fff0b3!important}
 <div class="field"><label for="jogador">Nome do jogador <em>*</em></label><div class="input-shell"><svg class="ic"><use href="#i-user"></use></svg><input id="jogador" maxlength="100" name="jogador" placeholder="Nome do jogador" required="" type="text"/></div></div>
 <div class="field"><label for="goleiro">Nome do goleiro <em>*</em></label><div class="input-shell"><svg class="ic"><use href="#i-shield"></use></svg><input id="goleiro" maxlength="100" name="goleiro" placeholder="Nome do goleiro" required="" type="text"/></div></div>
 <div class="field"><label for="idade">Idade do jogador <em>*</em></label><div class="input-shell"><svg class="ic"><use href="#i-calendar"></use></svg><input id="idade" inputmode="numeric" name="idade" autocomplete="off" placeholder="Ex.: 14" aria-describedby="age-feedback" required="" type="text" maxlength="8"/></div></div>
-<div class="field"><label for="idade-goleiro">Idade do goleiro <em>*</em></label><div class="input-shell"><svg class="ic"><use href="#i-calendar"></use></svg><input id="idade-goleiro" inputmode="numeric" name="idade_goleiro" autocomplete="off" placeholder="Ex.: 15" required="" type="text" maxlength="8"/></div></div>
+<div class="field"><label for="idade-goleiro">Idade do goleiro <em>*</em></label><div class="input-shell"><svg class="ic"><use href="#i-calendar"></use></svg><input id="idade-goleiro" inputmode="numeric" name="idade_goleiro" autocomplete="off" placeholder="Ex.: 15" aria-describedby="goleiro-feedback" required="" type="text" maxlength="8"/></div><small id="goleiro-feedback" class="goleiro-feedback" aria-live="polite">O goleiro deve pertencer à mesma categoria do jogador.</small></div>
 <div class="field field-full"><label for="igreja">Nome da igreja <small>(opcional)</small></label><div class="input-shell"><svg class="ic"><use href="#i-info"></use></svg><input id="igreja" name="igreja" maxlength="120" placeholder="Se participar de alguma igreja, informe o nome" type="text"/></div></div>
 <div class="field field-full"><label for="categoria">Categoria (calculada automaticamente)</label><div class="input-shell input-shell-locked"><svg class="ic"><use href="#i-check"></use></svg><input id="categoria" name="categoria" placeholder="Informe a idade para identificar a categoria" readonly="" type="text"/></div></div>
 </div>
@@ -1122,16 +1125,41 @@ footer .footer-inner a:hover{color:#fff0b3!important}
     const match = typed.match(/^(\d{1,3})(?:\s*anos?)?$/i);
     if (!match) return null;
     const age = Number(match[1]);
-    return Number.isInteger(age) && age >= 1 && age <= 120 ? age : null;
+    return Number.isInteger(age) && age >= 14 && age <= 120 ? age : null;
   }
   function categoryForAge(age) {
     if (age === null) return '';
     return age <= 15 ? 'Juvenil' : 'Adulto';
   }
+  // O goleiro precisa pertencer à MESMA categoria do jogador (não à mesma idade exata).
+  function goalkeeperValidForCategory(age, category) {
+    return Number.isInteger(age) && (
+      (category === 'Juvenil' && age >= 14 && age <= 15) ||
+      (category === 'Adulto' && age >= 16 && age <= 120)
+    );
+  }
+  function goalkeeperAgeRule(category) {
+    return category === 'Juvenil' ? '14 ou 15 anos' : '16 anos ou mais';
+  }
+  function updateGoalkeeperStatus(category) {
+    const hint = document.getElementById('goleiro-feedback');
+    const typed = String(goalkeeperAgeInput.value || '').trim();
+    const invalid = Boolean(typed && category &&
+      !goalkeeperValidForCategory(readGoalkeeperAge(), category));
+    if (hint) {
+      hint.textContent = category
+        ? `Goleiro da categoria ${category}: ${goalkeeperAgeRule(category)}.`
+          + (invalid ? ' Corrija a idade para prosseguir.' : '')
+        : 'Informe a idade do jogador. O goleiro deve pertencer à mesma categoria.';
+      hint.classList.toggle('error', invalid);
+    }
+    goalkeeperAgeInput.setAttribute('aria-invalid', invalid ? 'true' : 'false');
+  }
   function updateCategory() {
     const typed = String(ageInput.value || '').trim();
     const category = categoryForAge(readPlayerAge());
     categoryInput.value = category;
+    updateGoalkeeperStatus(category);
     // Um único PIX para as duas categorias; comprovante no contato correto de cada uma.
     pixUnico.hidden = !category;
     if (category) {
@@ -1163,6 +1191,10 @@ footer .footer-inner a:hover{color:#fff0b3!important}
     } else if (!category) {
       ageFeedback.textContent = 'Informe uma idade válida (ex.: 18). O jogador deve ter 14 anos ou mais.';
       ageFeedback.classList.add('error');
+    } else if (String(goalkeeperAgeInput.value || '').trim() &&
+      !goalkeeperValidForCategory(readGoalkeeperAge(), category)) {
+      ageFeedback.textContent = `Na categoria ${category}, o goleiro precisa ter ${goalkeeperAgeRule(category)}.`;
+      ageFeedback.classList.add('error');
     } else if (!onlineReady[category] && onlineErrors[category]) {
       ageFeedback.textContent = `Categoria: ${category}. Há um problema no contador dessa categoria no Firebase. Veja a mensagem de sincronização acima.`;
       ageFeedback.classList.add('error');
@@ -1177,6 +1209,8 @@ footer .footer-inner a:hover{color:#fff0b3!important}
   }
   ageInput.addEventListener('input', updateCategory);
   ageInput.addEventListener('change', updateCategory);
+  goalkeeperAgeInput.addEventListener('input', updateCategory);
+  goalkeeperAgeInput.addEventListener('change', updateCategory);
   updateCategory();
 
 
@@ -1261,9 +1295,9 @@ footer .footer-inner a:hover{color:#fff0b3!important}
       showError('Informe o telefone do responsável com DDD antes de enviar o comprovante.', phoneInput);
       return;
     }
-    if (readGoalkeeperAge() === null) {
+    if (!goalkeeperValidForCategory(readGoalkeeperAge(), category)) {
       event.preventDefault();
-      showError('Informe a idade do goleiro corretamente (ex.: 15) antes de enviar o comprovante.', goalkeeperAgeInput);
+      showError(`Para enviar o comprovante na categoria ${category}, o goleiro deve ter ${goalkeeperAgeRule(category)}.`, goalkeeperAgeInput);
       return;
     }
     atualizarLinkComprovante();
@@ -1291,10 +1325,14 @@ footer .footer-inner a:hover{color:#fff0b3!important}
     const age = readPlayerAge();
     if (age === null) { showError('Informe a idade do jogador corretamente (ex.: 18). A idade mínima é 14 anos.',ageInput); return; }
     const goalkeeperAge = readGoalkeeperAge();
-    if (goalkeeperAge === null) { showError('Informe a idade do goleiro corretamente (ex.: 15).', goalkeeperAgeInput); return; }
+    if (goalkeeperAge === null) { showError('Informe a idade do goleiro corretamente (mínimo de 14 anos).', goalkeeperAgeInput); return; }
+    const category = categoryForAge(age);
+    if (!goalkeeperValidForCategory(goalkeeperAge, category)) {
+      showError(`Na categoria ${category}, o goleiro deve ter ${goalkeeperAgeRule(category)}.`, goalkeeperAgeInput);
+      return;
+    }
     if (isDeadlineClosed()) { showError('As inscrições foram encerradas em 10/12/2026 às 23:59.', submitButton); return; }
     // Calcula a categoria diretamente pela idade informada no formulário.
-    const category = categoryForAge(age);
     categoryInput.value = category;
     updateCategory();
     // Destinatário fixo derivado da idade. Nunca aceitar contato selecionado pelo visitante.
@@ -1311,7 +1349,7 @@ footer .footer-inner a:hover{color:#fff0b3!important}
 
 
     const lines = [
-      'DE PÊNALTIS MISSÃO CALEBE',
+      'TORNEIO DE PÊNALTIS MISSÃO CALEBE',
       '',
       `Responsável: ${trim('responsavel')}`,
       `Telefone do responsável: ${formatPhone(digits)}`,
