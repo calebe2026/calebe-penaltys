@@ -546,6 +546,14 @@ body{background:radial-gradient(circle at top,#5d2b17 0,#2a1209 42%,#130703 100%
 .pix-unico .pix-comprovante:hover{background:#c7ff87}
 .destinatario-alerta{margin:10px 0 0;padding:11px 14px;border:1px solid #efb85d;background:#522419;color:#ffedc6;border-radius:10px;font-size:13px;font-weight:850;line-height:1.5}
 @media(max-width:520px){.pix-unico{padding:14px}.pix-unico .pix-comprovante{width:100%;text-align:center}}
+
+/* Destino obrigatório por categoria, sem opção de escolher outro contato. */
+.destino-fixo{margin:16px 0;padding:17px 19px;display:flex;flex-direction:column;gap:6px;background:linear-gradient(140deg,#142f35,#0d2429);border:1.5px solid #b6e66a;border-radius:14px;color:#f7ffe8;box-shadow:0 0 14px #b7e46719}
+.destino-fixo-titulo{color:#cfff7a;font-size:12px;font-weight:950;letter-spacing:.09em}
+.destino-fixo strong{font-size:21px;color:#ffffff;line-height:1.35}
+.destino-fixo span:not(.destino-fixo-titulo){font-size:14px;font-weight:800;color:#e2f6df}
+.destino-fixo small{font-size:12px;line-height:1.5;color:#c8d9d4}
+@media(max-width:520px){.destino-fixo{padding:14px}.destino-fixo strong{font-size:18px}}
 </style>
 <style id="calebe-slide-escolhido">
 .calebe-hero-novo{position:relative;min-height:0!important;display:block;overflow:hidden;background:#00112c;border:0!important;line-height:0;isolation:isolate;text-align:center}
@@ -711,7 +719,8 @@ footer .footer-inner a:hover{color:#fff0b3!important}
 
 <style id="contadores-ocultos">
 /* Contadores permanecem ativos no Firebase, mas não aparecem ao público. */
-#inscricoes .slots-board,#firebase-status{display:none!important}
+#inscricoes .slots-board,#firebase-status:not(.sync-error){display:none!important}
+#firebase-status.sync-error{display:block!important;color:#ffb7a0;margin:12px 0;padding:10px 14px;background:#3c211d;border:1px solid #dc8068;border-radius:9px}
 .event-facts{grid-template-columns:repeat(3,minmax(0,1fr))!important}
 @media(max-width:900px){.event-facts{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 @media(max-width:620px){.event-facts{grid-template-columns:1fr!important}}
@@ -839,10 +848,14 @@ footer .footer-inner a:hover{color:#fff0b3!important}
   <p><strong>Importante:</strong> a chave PIX é um <strong>CPF, não um telefone</strong>. Depois de pagar, envie o comprovante pelo WhatsApp <strong>de <span id="pix-contato">quem recebeu sua inscrição</span></strong>.</p>
   <a class="pix-comprovante" id="pix-comprovante" href="#" target="_blank" rel="noopener noreferrer" hidden>Enviar comprovante pelo WhatsApp ↗</a>
 </div>
-<fieldset class="contato-escolha"><legend>Para quem deseja enviar sua inscrição? <em>*</em></legend><label class="contato-opcao"><input type="radio" name="destinatario" value="nelsiane" required/><span><strong>Nelsiane</strong><small>(81) 97332-4838 · somente Adulto</small></span></label><label class="contato-opcao"><input type="radio" name="destinatario" value="branca" required/><span><strong>Branca</strong><small>(81) 9236-3729 · somente Juvenil</small></span></label></fieldset>
-<p id="destinatario-alerta" class="destinatario-alerta" role="alert" hidden></p>
+<div class="destino-fixo" id="destino-inscricao" aria-live="polite" role="status">
+  <span class="destino-fixo-titulo">DESTINO DA INSCRIÇÃO — DEFINIDO PELA IDADE</span>
+  <strong id="destino-nome">Informe a idade do jogador</strong>
+  <span id="destino-descricao">Juvenil: somente Branca. Adulto: somente Nelsiane.</span>
+  <small>O contato é escolhido automaticamente. Não é possível enviar a inscrição para a outra responsável.</small>
+</div>
 <button class="btn btn-whatsapp" type="submit"><svg class="ic"><use href="#i-phone"></use></svg> ENVIAR INSCRIÇÃO PELO WHATSAPP <svg class="ic"><use href="#i-arrow"></use></svg></button>
-<p class="privacy">A mesma chave PIX (CPF) vale para Juvenil e Adulto. Juvenil (14 a 15 anos): inscrição e comprovante somente para Branca. Adulto (16 anos ou mais): inscrição e comprovante somente para Nelsiane. A vaga é contabilizada no Firebase quando você confirma o formulário, antes de enviar a mensagem no WhatsApp.</p>
+<p class="privacy">A mesma chave PIX (CPF) vale para Juvenil e Adulto. Juvenil (14 a 15 anos): inscrição e comprovante somente para Branca. Adulto (16 anos ou mais): inscrição e comprovante somente para Nelsiane.</p>
 <p class="form-feedback" hidden="" id="form-feedback" role="alert"></p>
 </form>
 </div>
@@ -884,19 +897,9 @@ footer .footer-inner a:hover{color:#fff0b3!important}
   const pixUnico = document.getElementById('pix-unico');
   const pixContato = document.getElementById('pix-contato');
   const pixComprovante = document.getElementById('pix-comprovante');
-  const recipientWarning = document.getElementById('destinatario-alerta');
-  const recipientChoices = [...form.querySelectorAll('input[name="destinatario"]')];
-  const contatoPorCategoria = { Juvenil: 'branca', Adulto: 'nelsiane' };
-  let ultimaCategoriaExibida = '';
-  function atualizarAvisoDestinatario() {
-    const categoria = categoryForAge(readPlayerAge());
-    const marcado = form.querySelector('input[name="destinatario"]:checked')?.value;
-    const errado = Boolean(categoria && marcado && marcado !== contatoPorCategoria[categoria]);
-    recipientWarning.hidden = !errado;
-    recipientWarning.textContent = errado ? (categoria === 'Juvenil' ? 'Inscrições Juvenil só podem ser enviadas para Branca. Selecione Branca para continuar.' : 'Inscrições Adulto só podem ser enviadas para Nelsiane. Selecione Nelsiane para continuar.') : '';
-    return !errado;
-  }
-  recipientChoices.forEach(input => input.addEventListener('change', atualizarAvisoDestinatario));
+  const destinoNome = document.getElementById('destino-nome');
+  const destinoDescricao = document.getElementById('destino-descricao');
+  const contatoPorCategoria = Object.freeze({ Juvenil: 'branca', Adulto: 'nelsiane' });
   const feedback = document.getElementById('form-feedback');
   const phoneInput = document.getElementById('telefone');
   const submitButton = form.querySelector('button[type="submit"]');
@@ -1017,6 +1020,8 @@ footer .footer-inner a:hover{color:#fff0b3!important}
             ? `${ok[0]} sincronizado. Aguardando contador da outra categoria…`
             : 'Conectando aos contadores online…';
       syncLabel.classList.toggle('sync-error', broken.length > 0);
+      syncLabel.hidden = broken.length === 0;
+      syncLabel.setAttribute('aria-hidden', broken.length === 0 ? 'true' : 'false');
     }
     updateSlotBoard();
     updateRegistrationState();
@@ -1088,12 +1093,16 @@ footer .footer-inner a:hover{color:#fff0b3!important}
     for (const c of pending) onlineErrors[c] = 'Firebase não respondeu ('+c+'). Verifique internet, regras ou extensões que bloqueiam scripts.';
     if (pending.length) {
       if (syncLabel) {
-        syncLabel.textContent = 'Não foi possível conectar ao Firebase. Pressione Ctrl+F5, verifique as regras e se as bibliotecas do Firebase carregam.';
+        syncLabel.textContent = !window.CalebeFirebase
+          ? 'O módulo do contador não iniciou. Confira se firebase-sync.js foi publicado junto ao index.html e atualize a página.'
+          : 'Aguardando resposta do Firebase. Verifique a conexão com a internet e, se persistir, o Console do navegador (F12).';
         syncLabel.classList.add('sync-error');
+        syncLabel.hidden = false;
+        syncLabel.setAttribute('aria-hidden', 'false');
       }
       updateSlotBoard();updateRegistrationState();updateCategory();
     }
-  }, 16000);
+  }, 25000);
   setInterval(() => {updateCountdown(); updateRegistrationState();}, 1000);
 
 
@@ -1109,11 +1118,6 @@ footer .footer-inner a:hover{color:#fff0b3!important}
   function categoryForAge(age) {
     if (age === null) return '';
     return age <= 15 ? 'Juvenil' : 'Adulto';
-  }
-  function categoriaMudou(categoria) {
-    if (categoria === ultimaCategoriaExibida) return false;
-    ultimaCategoriaExibida = categoria;
-    return true;
   }
   function updateCategory() {
     const typed = String(ageInput.value || '').trim();
@@ -1132,11 +1136,18 @@ footer .footer-inner a:hover{color:#fff0b3!important}
       pixComprovante.hidden = true;
       pixComprovante.removeAttribute('href');
     }
-    if (categoriaMudou(category)) {
-      const autorizado = contatoPorCategoria[category];
-      for (const opcao of recipientChoices) opcao.checked = Boolean(autorizado && opcao.value === autorizado);
+    // Destino fixo: categoria Juvenil -> Branca; Adulto -> Nelsiane.
+    // A interface não permite escolher outro destinatário.
+    if (category) {
+      const responsavel = CONTATOS_INSCRICAO[contatoPorCategoria[category]];
+      destinoNome.textContent = `Somente ${responsavel.nome}`;
+      destinoDescricao.textContent = category === 'Juvenil'
+        ? `Inscrição Juvenil e comprovante PIX: WhatsApp de Branca.`
+        : `Inscrição Adulto e comprovante PIX: WhatsApp de Nelsiane.`;
+    } else {
+      destinoNome.textContent = 'Informe a idade do jogador';
+      destinoDescricao.textContent = 'Juvenil: somente Branca. Adulto: somente Nelsiane.';
     }
-    atualizarAvisoDestinatario();
     ageFeedback.classList.remove('error','success');
     if (!typed) {
       ageFeedback.innerHTML = 'Juvenil: de 14 a 15 anos <span>•</span> Adulto: de 16 anos em diante.';
@@ -1204,15 +1215,11 @@ footer .footer-inner a:hover{color:#fff0b3!important}
     const category = categoryForAge(age);
     categoryInput.value = category;
     updateCategory();
-    const destinatario = form.querySelector('input[name="destinatario"]:checked')?.value;
+    // Destinatário fixo derivado da idade. Nunca aceitar contato selecionado pelo visitante.
     const contatoPermitido = contatoPorCategoria[category];
-    if (destinatario !== contatoPermitido) {
-      const aviso = category === 'Juvenil'
-        ? 'Inscrições Juvenil só podem ser enviadas para Branca. Selecione Branca.'
-        : 'Inscrições Adulto só podem ser enviadas para Nelsiane. Selecione Nelsiane.';
-      atualizarAvisoDestinatario();
-      showError(aviso, form.querySelector('input[name="destinatario"][value="' + contatoPermitido + '"]'));
-      return; // Nunca reserva vaga para o contato errado.
+    if (!contatoPermitido) {
+      showError('Categoria inválida. Informe a idade do jogador.', ageInput);
+      return;
     }
     if (!window.CalebeFirebase || !onlineReady[category]) {
       showError(onlineErrors[category] || `O contador online da categoria ${category} está indisponível. Verifique o Firebase e atualize a página.`, ageInput);
@@ -1311,6 +1318,144 @@ footer .footer-inner a:hover{color:#fff0b3!important}
 <script defer src="https://www.gstatic.com/firebasejs/13.1.0/firebase-app-compat.js"></script>
 <script defer src="https://www.gstatic.com/firebasejs/13.1.0/firebase-auth-compat.js"></script>
 <script defer src="https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore-compat.js"></script>
-<script defer src="firebase-sync.js?v=20261102-pix-unico"></script>
+<script defer src="firebase-sync.js?v=20261102-branca-nelsiane"></script>
+<!-- Inicialização de segurança: também funciona se firebase-sync.js não for enviado à hospedagem. -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    if (window.CalebeFirebase) return; // O arquivo externo foi carregado corretamente.
+    console.warn('Calebe: firebase-sync.js não foi carregado; inicializando contador embutido no HTML.');
+    // MISSÃO CALEBE - FIREBASE COMPARTILHADO (SDK compat, com diagnóstico de erros)
+    // Sem falha silenciosa: se a conexão falhar, o site informa o motivo.
+    // As informações pessoais do formulário são enviadas para o WhatsApp; aqui só ficam os contadores.
+    (function () {
+      'use strict';
+      const config = {
+        apiKey: 'AIzaSyDHtID3pjMuhuu7DFcHbExnGhlKp-HlpEs',
+        authDomain: 'calebe-penaltys.firebaseapp.com',
+        projectId: 'calebe-penaltys',
+        storageBucket: 'calebe-penaltys.firebasestorage.app',
+        messagingSenderId: '370834177828',
+        appId: '1:370834177828:web:28d3ffe185447d49613db1'
+      };
+      const keys = ['Juvenil', 'Adulto'];
+      const latest = {
+        Juvenil: {inscritos:null, server:false, error:''},
+        Adulto: {inscritos:null, server:false, error:''}
+      };
+      let signedIn = false;
+      let authError = '';
+      let db;
+      let refs;
+      let syncStarted = false;
+      const shortCode = e => String(e?.code || '').replace(/[^a-zA-Z0-9/_-]/g,'').slice(0,85);
+    
+      function broadcast(){
+        const readyByCategory = {}, counts = {}, errors = {};
+        for(const category of keys){
+          const v=latest[category];
+          readyByCategory[category] = signedIn && !authError && v.server && !v.error;
+          counts[category]=Number.isInteger(v.inscritos)?v.inscritos:null;
+          errors[category]=authError || v.error;
+        }
+        window.dispatchEvent(new CustomEvent('calebe-firebase-state',{detail:{readyByCategory,counts,errors}}));
+      }
+      function setFailure(message){
+        authError=message;
+        broadcast();
+      }
+      function goodCounter(data){
+        return data && Number.isInteger(data.inscritos) && data.inscritos>=0 && data.inscritos<=64
+          && data.limite===64;
+      }
+      function reportError(category,error){
+        const value=latest[category];
+        value.inscritos=null;
+        value.server=false;
+        const code=shortCode(error);
+        console.error('Calebe Firestore:',category,error);
+        if(code==='permission-denied'){
+          value.error='Acesso negado a contadores/'+category.toLowerCase()+'. Confira Firestore → Regras (permissão de leitura).';
+        } else if(code==='unavailable'){
+          value.error='Sem conexão com o Firestore ('+category+'). Verifique internet e bloqueadores do navegador.';
+        } else {
+          value.error='Falha ao ler contadores/'+category.toLowerCase()+' ('+(code||'erro desconhecido')+').';
+        }
+        broadcast();
+      }
+    
+      async function boot(){
+        if(syncStarted)return;
+        syncStarted=true;
+        window.CalebeFirebase = {
+          async reserve(category){
+            if(!keys.includes(category)) throw Object.assign(new Error('Categoria inválida'),{code:'invalid-argument'});
+            const v=latest[category];
+            if(!signedIn || !v.server || v.error || authError){
+              throw Object.assign(new Error(v.error||authError||'Sem conexão ao contador'),{code:'unavailable'});
+            }
+            const ref=refs[category];
+            await db.runTransaction(async transaction=>{
+              const snap=await transaction.get(ref);
+              if(!snap.exists)throw Object.assign(new Error('Contador não existe'),{code:'not-found'});
+              const data=snap.data();
+              if(!goodCounter(data))throw Object.assign(new Error('Dados do contador incorretos'),{code:'failed-precondition'});
+              if(data.inscritos>=64)throw Object.assign(new Error('Vagas esgotadas'),{code:'vagas-esgotadas'});
+              transaction.update(ref,{inscritos:data.inscritos+1});
+            });
+          }
+        };
+        if(!window.firebase || typeof window.firebase.initializeApp!=='function' ||
+           typeof window.firebase.auth!=='function' || typeof window.firebase.firestore!=='function'){
+          setFailure('Bibliotecas Firebase não carregaram. Confira a conexão com gstatic.com e recarregue (Ctrl+F5).');
+          return;
+        }
+        try{
+          const firebase=window.firebase;
+          const app=firebase.apps.length ? firebase.app() : firebase.initializeApp(config);
+          const auth=app.auth();
+          db=app.firestore();
+          refs={Juvenil:db.doc('contadores/juvenil'),Adulto:db.doc('contadores/adulto')};
+          // Evita deixar o site para sempre em “Conectando...” quando o login trava.
+          await Promise.race([
+            auth.signInAnonymously(),
+            new Promise((_,reject)=>setTimeout(()=>reject(Object.assign(new Error('Tempo esgotado'),{code:'auth/timeout'})),12000))
+          ]);
+          signedIn=true;
+          broadcast();
+          for(const category of keys){
+            const ref=refs[category];
+            ref.onSnapshot({includeMetadataChanges:true},snapshot=>{
+              const v=latest[category];
+              if(!snapshot.exists){
+                v.inscritos=null;
+                v.server=false;
+                v.error='Documento contadores/'+category.toLowerCase()+' não encontrado no Firebase.';
+              } else if(!goodCounter(snapshot.data())){
+                v.inscritos=null;
+                v.server=false;
+                v.error='Em contadores/'+category.toLowerCase()+': confira inscritos (0 a 64) e limite (64), ambos numéricos.';
+              } else {
+                v.inscritos=snapshot.data().inscritos;
+                v.server=!snapshot.metadata.fromCache && !snapshot.metadata.hasPendingWrites;
+                v.error='';
+              }
+              broadcast();
+            },error=>reportError(category,error));
+          }
+        }catch(error){
+          console.error('Calebe Firebase Auth:',error);
+          const code=shortCode(error);
+          if(code==='auth/operation-not-allowed') setFailure('Ative Authentication → Método de login → Anônimo no Firebase.');
+          else if(code==='auth/network-request-failed') setFailure('Falha na internet ao conectar ao Firebase. Confira a conexão e bloqueadores.');
+          else if(code==='auth/unauthorized-domain') setFailure('Domínio não autorizado pelo Firebase Authentication.');
+          else setFailure('Não foi possível autenticar com Firebase ('+(code||'erro sem código')+').');
+        }
+      }
+      // Os scripts compat são carregados em ordem com defer no index.html.
+      boot();
+    })();
+  });
+</script>
+
 </body>
 </html>
