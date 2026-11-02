@@ -1321,13 +1321,7 @@ footer .footer-inner a:hover{color:#fff0b3!important}
       `Idade do jogador: ${age} anos`,
       `Idade do goleiro: ${goalkeeperAge} anos`,
       `Categoria: ${category}`,
-      ...(trim('igreja') ? [`Igreja: ${trim('igreja')}`] : []),
-      '',
-      'PIX único para Juvenil e Adulto',
-      'Chave PIX (CPF): 112.983.544-80',
-      'Banco: Caixa Econômica Federal',
-      'Valor: R$ 50,00 por dupla',
-      `Comprovante: enviar para ${category === 'Juvenil' ? 'Branca' : 'Nelsiane'} neste WhatsApp após o pagamento (a chave PIX é CPF, não telefone).`
+      ...(trim('igreja') ? [`Congregação: ${trim('igreja')}`] : [])
     ];
     const contato = CONTATOS_INSCRICAO[contatoPermitido];
     if (!contato) { showError('Contato da categoria indisponível.', submitButton); return; }
