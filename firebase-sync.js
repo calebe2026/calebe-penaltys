@@ -537,15 +537,15 @@ body{background:radial-gradient(circle at top,#5d2b17 0,#2a1209 42%,#130703 100%
 .firebase-status.sync-error{color:#ffb7a0}
 
 
-/* Orientações do PIX Juvenil e regra de contato por categoria */
-.pix-juvenil{margin:15px 0 8px;padding:18px 19px;background:linear-gradient(145deg,#193b30,#0d2632);border:1px solid #a6f35d;border-radius:15px;box-shadow:0 0 17px #76dd2120}
-.pix-juvenil h3{margin:0 0 10px;font-size:19px;color:#ddff82}
-.pix-juvenil p{margin:8px 0;font-size:14px;line-height:1.55;color:#f0ffeb}
-.pix-juvenil .pix-chave{display:block;margin:10px 0;padding:11px 13px;font-size:clamp(18px,4vw,24px);font-weight:900;letter-spacing:.06em;color:#ffe39c;border:1px dashed #dbd172;border-radius:10px;overflow-wrap:anywhere}
-.pix-juvenil .pix-comprovante{display:inline-flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;padding:11px 15px;border-radius:10px;background:#96ed48;color:#09292b;font-weight:900;font-size:13px;text-decoration:none;min-height:42px}
-.pix-juvenil .pix-comprovante:hover{background:#c7ff87}
+/* PIX único para as duas categorias e regra de contato por categoria */
+.pix-unico{margin:15px 0 8px;padding:18px 19px;background:linear-gradient(145deg,#193b30,#0d2632);border:1px solid #a6f35d;border-radius:15px;box-shadow:0 0 17px #76dd2120}
+.pix-unico h3{margin:0 0 10px;font-size:19px;color:#ddff82}
+.pix-unico p{margin:8px 0;font-size:14px;line-height:1.55;color:#f0ffeb}
+.pix-unico .pix-chave{display:block;margin:10px 0;padding:11px 13px;font-size:clamp(18px,4vw,24px);font-weight:900;letter-spacing:.06em;color:#ffe39c;border:1px dashed #dbd172;border-radius:10px;overflow-wrap:anywhere}
+.pix-unico .pix-comprovante{display:inline-flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;padding:11px 15px;border-radius:10px;background:#96ed48;color:#09292b;font-weight:900;font-size:13px;text-decoration:none;min-height:42px}
+.pix-unico .pix-comprovante:hover{background:#c7ff87}
 .destinatario-alerta{margin:10px 0 0;padding:11px 14px;border:1px solid #efb85d;background:#522419;color:#ffedc6;border-radius:10px;font-size:13px;font-weight:850;line-height:1.5}
-@media(max-width:520px){.pix-juvenil{padding:14px}.pix-juvenil .pix-comprovante{width:100%;text-align:center}}
+@media(max-width:520px){.pix-unico{padding:14px}.pix-unico .pix-comprovante{width:100%;text-align:center}}
 </style>
 <style id="calebe-slide-escolhido">
 .calebe-hero-novo{position:relative;min-height:0!important;display:block;overflow:hidden;background:#00112c;border:0!important;line-height:0;isolation:isolate;text-align:center}
@@ -830,19 +830,19 @@ footer .footer-inner a:hover{color:#fff0b3!important}
 <div class="field field-full"><label for="categoria">Categoria (calculada automaticamente)</label><div class="input-shell input-shell-locked"><svg class="ic"><use href="#i-check"></use></svg><input id="categoria" name="categoria" placeholder="Informe a idade para identificar a categoria" readonly="" type="text"/></div></div>
 </div>
 <div aria-live="polite" class="age-feedback" id="age-feedback" role="status">Juvenil: de 14 a 15 anos <span>•</span> Adulto: de 16 anos em diante.</div>
-<div class="pix-juvenil" id="juvenil-pix" hidden>
-  <h3>PIX — Inscrição Juvenil</h3>
+<div class="pix-unico" id="pix-unico" hidden>
+  <h3>PIX ÚNICO — Juvenil e Adulto</h3>
   <p>Valor da inscrição: <strong>R$ 50,00 por dupla</strong></p>
   <p>Banco: <strong>Caixa Econômica Federal</strong></p>
-  <p>Chave PIX do tipo <strong>CPF</strong>:</p>
+  <p>Chave PIX do tipo <strong>CPF</strong> (a mesma para as duas categorias):</p>
   <strong class="pix-chave">112.983.544-80</strong>
-  <p><strong>Importante:</strong> esta chave PIX é um CPF, <strong>não é número de WhatsApp</strong>. Após realizar o pagamento, envie o comprovante pelo WhatsApp de <strong>Branca</strong>, responsável pelas inscrições Juvenil.</p>
-  <a class="pix-comprovante" href="https://wa.me/558192363729?text=Ol%C3%A1%2C%20Branca%21%20Quero%20enviar%20o%20comprovante%20do%20PIX%20da%20inscri%C3%A7%C3%A3o%20Juvenil%20da%20Miss%C3%A3o%20Calebe." target="_blank" rel="noopener noreferrer">Enviar comprovante para Branca pelo WhatsApp ↗</a>
+  <p><strong>Importante:</strong> a chave PIX é um <strong>CPF, não um telefone</strong>. Depois de pagar, envie o comprovante pelo WhatsApp <strong>de <span id="pix-contato">quem recebeu sua inscrição</span></strong>.</p>
+  <a class="pix-comprovante" id="pix-comprovante" href="#" target="_blank" rel="noopener noreferrer" hidden>Enviar comprovante pelo WhatsApp ↗</a>
 </div>
 <fieldset class="contato-escolha"><legend>Para quem deseja enviar sua inscrição? <em>*</em></legend><label class="contato-opcao"><input type="radio" name="destinatario" value="nelsiane" required/><span><strong>Nelsiane</strong><small>(81) 97332-4838 · somente Adulto</small></span></label><label class="contato-opcao"><input type="radio" name="destinatario" value="branca" required/><span><strong>Branca</strong><small>(81) 9236-3729 · somente Juvenil</small></span></label></fieldset>
 <p id="destinatario-alerta" class="destinatario-alerta" role="alert" hidden></p>
 <button class="btn btn-whatsapp" type="submit"><svg class="ic"><use href="#i-phone"></use></svg> ENVIAR INSCRIÇÃO PELO WHATSAPP <svg class="ic"><use href="#i-arrow"></use></svg></button>
-<p class="privacy">Juvenil (14 a 15 anos): inscrição somente para Branca; a chave PIX é um CPF e o comprovante deve ser enviado à Branca pelo WhatsApp. Adulto (16 anos ou mais): inscrição somente para Nelsiane; o PIX do Adulto será informado posteriormente. A vaga é contabilizada no Firebase quando você confirma o formulário, antes de enviar a mensagem no WhatsApp.</p>
+<p class="privacy">A mesma chave PIX (CPF) vale para Juvenil e Adulto. Juvenil (14 a 15 anos): inscrição e comprovante somente para Branca. Adulto (16 anos ou mais): inscrição e comprovante somente para Nelsiane. A vaga é contabilizada no Firebase quando você confirma o formulário, antes de enviar a mensagem no WhatsApp.</p>
 <p class="form-feedback" hidden="" id="form-feedback" role="alert"></p>
 </form>
 </div>
@@ -881,7 +881,9 @@ footer .footer-inner a:hover{color:#fff0b3!important}
   const ageInput = document.getElementById('idade');
   const categoryInput = document.getElementById('categoria');
   const ageFeedback = document.getElementById('age-feedback');
-  const juvenilPix = document.getElementById('juvenil-pix');
+  const pixUnico = document.getElementById('pix-unico');
+  const pixContato = document.getElementById('pix-contato');
+  const pixComprovante = document.getElementById('pix-comprovante');
   const recipientWarning = document.getElementById('destinatario-alerta');
   const recipientChoices = [...form.querySelectorAll('input[name="destinatario"]')];
   const contatoPorCategoria = { Juvenil: 'branca', Adulto: 'nelsiane' };
@@ -1117,7 +1119,19 @@ footer .footer-inner a:hover{color:#fff0b3!important}
     const typed = String(ageInput.value || '').trim();
     const category = categoryForAge(readPlayerAge());
     categoryInput.value = category;
-    juvenilPix.hidden = category !== 'Juvenil';
+    // Um único PIX para as duas categorias; comprovante no contato correto de cada uma.
+    pixUnico.hidden = !category;
+    if (category) {
+      const responsavelPix = CONTATOS_INSCRICAO[contatoPorCategoria[category]];
+      pixContato.textContent = responsavelPix.nome;
+      const mensagemComprovante = `Olá, ${responsavelPix.nome}! Vou enviar o comprovante do PIX da inscrição ${category} do Torneio de Pênaltis Missão Calebe.`;
+      pixComprovante.href = `https://wa.me/${responsavelPix.numero}?text=${encodeURIComponent(mensagemComprovante)}`;
+      pixComprovante.textContent = `Enviar comprovante para ${responsavelPix.nome} pelo WhatsApp ↗`;
+      pixComprovante.hidden = false;
+    } else {
+      pixComprovante.hidden = true;
+      pixComprovante.removeAttribute('href');
+    }
     if (categoriaMudou(category)) {
       const autorizado = contatoPorCategoria[category];
       for (const opcao of recipientChoices) opcao.checked = Boolean(autorizado && opcao.value === autorizado);
@@ -1218,13 +1232,12 @@ footer .footer-inner a:hover{color:#fff0b3!important}
       `Idade do jogador: ${age} anos`,
       `Categoria: ${category}`,
       ...(trim('igreja') ? [`Igreja: ${trim('igreja')}`] : []),
-      ...(category === 'Juvenil' ? [
-        '',
-        'Chave PIX (CPF): 112.983.544-80',
-        'Banco: Caixa Econômica Federal',
-        'Valor: R$ 50,00 por dupla',
-        'Comprovante: enviar para Branca neste WhatsApp após o pagamento (a chave PIX é um CPF, não um telefone).'
-      ] : [])
+      '',
+      'PIX único para Juvenil e Adulto',
+      'Chave PIX (CPF): 112.983.544-80',
+      'Banco: Caixa Econômica Federal',
+      'Valor: R$ 50,00 por dupla',
+      `Comprovante: enviar para ${category === 'Juvenil' ? 'Branca' : 'Nelsiane'} neste WhatsApp após o pagamento (a chave PIX é CPF, não telefone).`
     ];
     const contato = CONTATOS_INSCRICAO[contatoPermitido];
     if (!contato) { showError('Contato da categoria indisponível.', submitButton); return; }
@@ -1298,6 +1311,6 @@ footer .footer-inner a:hover{color:#fff0b3!important}
 <script defer src="https://www.gstatic.com/firebasejs/13.1.0/firebase-app-compat.js"></script>
 <script defer src="https://www.gstatic.com/firebasejs/13.1.0/firebase-auth-compat.js"></script>
 <script defer src="https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore-compat.js"></script>
-<script defer src="firebase-sync.js?v=20261102-contador-64"></script>
+<script defer src="firebase-sync.js?v=20261102-pix-unico"></script>
 </body>
 </html>
